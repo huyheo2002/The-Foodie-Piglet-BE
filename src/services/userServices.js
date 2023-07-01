@@ -11,9 +11,9 @@ const handleUserLogin = (username, password) => {
         // compare password
         let user = await db.User.findOne({
           where: { username: username },
-          // get foreign key 
+          // get foreign key
           attributes: ["email", "username", "roleId", "password"],
-          raw: true,          
+          raw: true,
         });
 
         if (user) {
@@ -63,6 +63,34 @@ const checkUsername = (username) => {
   });
 };
 
+const getAllUsers = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let users = "";
+      if (userId === "all") {
+        users = await db.User.findAll({
+          attributes: {
+            exclude: ["password"],
+          }
+        });
+      } else if(userId && userId !== "all") {
+        users = db.User.findOne({
+          where: { id: userId },
+          attributes: {
+            exclude: ["password"],
+          }
+        });
+      } else {
+
+      }
+      resolve(users);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
+  getAllUsers: getAllUsers,
 };
