@@ -23,9 +23,10 @@ const handleLogin = async (req, res) => {
 
 const handleGetAllUsers = async (req, res) => {
     // id : all => getallUsers, single => getOneUser
-    let id = req.body.id; 
+    // post sd: req.body get sd: req.query
+    let id = req.query.id; 
     let users = await userServices.getAllUsers(id);
-    console.log("users", users)
+    // console.log("users", users)
     return res.status(200).json({
         errCode: 0,
         errMsg: "Ok",
