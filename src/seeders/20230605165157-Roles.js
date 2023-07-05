@@ -8,11 +8,15 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
-      name: 'User',
+      name: 'Manager',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
       name: 'Staff',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }, {
+      name: 'User',
       createdAt: new Date(),
       updatedAt: new Date()
     }]);
@@ -24,11 +28,15 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
-      name: 'User',
+      name: 'Manager',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
       name: 'Staff',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }, {
+      name: 'User',
       createdAt: new Date(),
       updatedAt: new Date()
     }]);

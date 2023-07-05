@@ -24,7 +24,6 @@ const createUser = async (data) => {
         } catch (error) {
             reject(error)
         }
-
     })
 
 }

@@ -5,8 +5,7 @@
     "database": "thefoodiepiglet",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "logging": true,    
-    "query": { "raw": true }
+    "logging": true
   },
   "test": {
     "username": "root",

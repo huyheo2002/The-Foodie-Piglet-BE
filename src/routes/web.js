@@ -21,6 +21,11 @@ const initWebRoutes = (app) => {
     // api sd ben react
     router.post("/api/login", userController.handleLogin);
     router.get("/api/get-all-users", userController.handleGetAllUsers);
+    router.get("/api/get-all-users-compact", userController.handleGetAllUsersCompact);
+    router.post("/api/create-user", userController.handleCreateNewUser);
+    router.put("/api/edit-user", userController.handleEditUser);
+    router.delete("/api/delete-user", userController.handleDeleteUser);
+
 
     return app.use("/", router);
 }
