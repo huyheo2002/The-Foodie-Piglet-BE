@@ -181,10 +181,10 @@ const createNewUser = (data) => {
 const editUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let hashPasswordFromBcrypt;
-      if (data.password) {
-        hashPasswordFromBcrypt = await hashPassword(data.password);
-      }
+      // let hashPasswordFromBcrypt;
+      // if (data.password) {
+      //   hashPasswordFromBcrypt = await hashPassword(data.password);
+      // }
       if (!data.id) {
         resolve({
           errCode: 2,
@@ -203,7 +203,7 @@ const editUser = (data) => {
           name: data.name,
           email: data.email,
           username: data.username,
-          password: hashPasswordFromBcrypt || data.password,
+          // password: hashPasswordFromBcrypt || data.password,
           phone: data.phone,
           address: data.address,
           gender: data.gender,
