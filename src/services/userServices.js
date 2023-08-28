@@ -13,7 +13,8 @@ const handleUserLogin = (username, password) => {
         let user = await db.User.findOne({
           where: { username: username },
           // get foreign key
-          attributes: ["email", "username", "roleId", "password"],
+          // chỉ lấy các trường trong attributes
+          // attributes: ["email", "username", "roleId", "password"],
           raw: true,
         });
 
@@ -256,6 +257,31 @@ const deleteUser = (userId) => {
   });
 };
 
+const userLoginGoogleSuccess = (email) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log("vaiz mèm :v")
+      let user = await db.User.findOne({
+        where: { email: email },
+      });
+      if (!user) {
+        resolve({
+          errCode: 2,
+          errMsg: "The user isn't exits",
+        });
+      }      
+
+      resolve({
+        errCode: 0,
+        message: "Login success",
+        user: user
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 module.exports = {
   handleUserLogin: handleUserLogin,
   getAllUsers: getAllUsers,
@@ -263,4 +289,5 @@ module.exports = {
   getAllUsersCompact: getAllUsersCompact,
   editUser: editUser,
   deleteUser: deleteUser,
+  userLoginGoogleSuccess: userLoginGoogleSuccess,
 };

@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: true,      
+      allowNull: true,
+      unique: true,      
     },
     username: {
       type: DataTypes.STRING,
@@ -55,7 +56,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     roleId: {
       type: DataTypes.INTEGER,
-      allowNull: false,      
+      allowNull: false,
+      defaultValue: 4      
     },
     createdAt: {
       type: DataTypes.DATE,   

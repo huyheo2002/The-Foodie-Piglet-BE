@@ -1,5 +1,25 @@
 import userServices from "../services/userServices";
 
+const handleLoginSuccess = async (req, res) => {
+    const email = req.params.email;
+    console.log("email", email)
+    if(!email) {
+        return res.status(500).json({
+            errCode: 1,
+            message: "Missing inputs!"
+        })
+    }
+    let dataUser = await userServices.userLoginGoogleSuccess(email);
+
+    res.status(200).json({
+        message: dataUser.errMsg,
+        errCode: dataUser.errCode,
+        user: dataUser.user ? dataUser.user : {}
+    })
+    res.end();
+    // res.write(req.params.userId);
+}
+
 const handleLogin = async (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
@@ -79,5 +99,5 @@ module.exports = {
     handleGetAllUsersCompact: handleGetAllUsersCompact,
     handleEditUser: handleEditUser,
     handleDeleteUser: handleDeleteUser,
-
+    handleLoginSuccess: handleLoginSuccess,
 }

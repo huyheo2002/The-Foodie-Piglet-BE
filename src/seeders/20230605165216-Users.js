@@ -1,13 +1,31 @@
 'use strict';
+const bcrypt = require("bcryptjs");
+const salt = bcrypt.genSaltSync(10);
+
+// const hashPassword = (password) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       let hashPass = await bcrypt.hashSync(password, salt);
+//       resolve(hashPass);
+//     } catch (error) {
+//       reject(error);
+//     }
+//   });
+// };
+
+const hashPassword = (password) => {
+  return bcrypt.hashSync(password, salt);
+};
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {    
+    let hashPasswordFromBcrypt = hashPassword("123");
     return queryInterface.bulkInsert('Users', [{
       name: 'Văn Huy',
-      email: "huy12@gmail.com",
+      email: "huy12@admin.com",
       username: "huyadmin",
-      password: "123",
+      password: hashPasswordFromBcrypt,
       phone: "01234567899",
       address: "Hà Nội",
       gender: 1,
@@ -17,9 +35,9 @@ module.exports = {
       updatedAt: new Date()
     }, {
       name: 'Văn Huy',
-      email: "huy12@gmail.com",
+      email: "huy12@user.com",
       username: "huyuser",
-      password: "123",
+      password: hashPasswordFromBcrypt,
       phone: "01234567899",
       address: "Hà Nội",
       gender: 1,
@@ -29,9 +47,9 @@ module.exports = {
       updatedAt: new Date()
     }, {
       name: 'Văn Huy',
-      email: "huy12@gmail.com",
+      email: "huy12@staff.com",
       username: "huystaff",
-      password: "123",
+      password: hashPasswordFromBcrypt,
       phone: "01234567899",
       address: "Hà Nội",
       gender: 1,
@@ -41,9 +59,9 @@ module.exports = {
       updatedAt: new Date()
     }, {
       name: 'Văn Huy',
-      email: "huy12@gmail.com",
+      email: "huy12@manager.com",
       username: "huymanager",
-      password: "123",
+      password: hashPasswordFromBcrypt,
       phone: "01234567899",
       address: "Hà Nội",
       gender: 1,
@@ -55,7 +73,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('Roles', null, [{
+    return queryInterface.bulkDelete('Users', null, [{
       name: 'Văn Huy',
       email: "huy12@gmail.com",
       username: "huyadmin",

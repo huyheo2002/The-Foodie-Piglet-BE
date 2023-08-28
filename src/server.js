@@ -3,9 +3,11 @@ import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./routes/web";
 import connect from "./config/connectDB";
+
+require("./passport");
 require("dotenv").config();
 const cors = require('cors');
-let app = express();
+const app = express();
 
 // config app 
 app.use(cors({ origin: true }));
