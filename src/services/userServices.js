@@ -1,5 +1,7 @@
 import db from "../models";
 import bcrypt from "bcryptjs";
+import jwtAction from "../middleware/JwtAction";
+require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
 
 const handleUserLogin = (username, password) => {
@@ -15,6 +17,10 @@ const handleUserLogin = (username, password) => {
           // get foreign key
           // chỉ lấy các trường trong attributes
           // attributes: ["email", "username", "roleId", "password"],
+
+          // attributes: {
+          //   exclude: ["password"]
+          // },
           raw: true,
         });
 
@@ -25,9 +31,15 @@ const handleUserLogin = (username, password) => {
           if (check) {
             dataUser.errCode = 0;
             dataUser.errMsg = "oke";
-
             delete user.password;
-            dataUser.user = user;
+
+            // jwt
+            let payload = {
+              user: user,
+              expiresIn: process.env.JWT_EXPIRES_IN
+            }
+            let token = jwtAction.createJwt(payload)
+            dataUser.accessToken = token;
           } else {
             dataUser.errCode = 3;
             dataUser.errMsg = "Wrong password";
@@ -41,6 +53,8 @@ const handleUserLogin = (username, password) => {
         dataUser.errMsg =
           "You'r email isn't exist in your system. Pls try other email";
       }
+
+      console.log("dataUser: ", dataUser)
       resolve(dataUser);
     } catch (error) {
       reject(error);

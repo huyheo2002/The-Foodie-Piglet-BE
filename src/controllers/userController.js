@@ -37,7 +37,7 @@ const handleLogin = async (req, res) => {
     return res.status(200).json({
         message: dataUser.errMsg,
         errCode: dataUser.errCode,
-        user: dataUser.user ? dataUser.user : {}
+        accessToken: dataUser.accessToken ? dataUser.accessToken : {}
     })
 }
 
