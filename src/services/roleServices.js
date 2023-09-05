@@ -16,7 +16,7 @@ const getAllRoles = (roleId) => {
         });
       } else {
       }
-      console.log("reoles", roles)
+      // console.log("reoles", roles)
       resolve(roles);
     } catch (error) {
       reject(error);
