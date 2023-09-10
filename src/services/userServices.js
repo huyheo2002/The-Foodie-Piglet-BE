@@ -227,7 +227,9 @@ const editUser = (data, newAvatar) => {
       const idPrim = data.id;
       let user = await db.User.findByPk(idPrim);
 
+      console.log("user Edit:", user)
       if (user) {
+        console.log("user tồn tại")
         let oldImage = user.avatar;
         let nameImage = null;
         if (newAvatar) {
@@ -267,7 +269,7 @@ const editUser = (data, newAvatar) => {
           gender: data.gender,
           roleId: data.roleId,
           avatar: nameImage ?? oldImage,
-        });
+        });        
 
         resolve({
           errCode: 0,
@@ -323,25 +325,33 @@ const deleteUser = (userId) => {
   });
 };
 
+// error
 const userLoginGoogleSuccess = (email) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("vaiz mèm :v");
+      let dataUser = {};
       let user = await db.User.findOne({
         where: { email: email },
       });
       if (!user) {
-        resolve({
-          errCode: 2,
-          errMsg: "The user isn't exits",
-        });
+        dataUser.errCode = 1;
+        dataUser.message = "Login fail";
+        
+        resolve(dataUser);
       }
 
-      resolve({
-        errCode: 0,
-        message: "Login success",
+      // jwt
+      let payload = {
         user: user,
-      });
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      };
+      let token = jwtAction.createJwt(payload);
+      dataUser.accessToken = token;
+      dataUser.errCode = 0;
+      dataUser.message = "Login success";
+      
+      console.log("dataUser google: ", dataUser);
+      resolve(dataUser);
     } catch (error) {
       reject(error);
     }

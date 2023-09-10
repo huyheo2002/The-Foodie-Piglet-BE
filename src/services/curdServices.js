@@ -25,7 +25,6 @@ const createUser = async (data) => {
             reject(error)
         }
     })
-
 }
 
 const hashPassword = (password) => {

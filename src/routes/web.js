@@ -107,6 +107,7 @@ const initWebRoutes = (app) => {
 
   // table for Table :v
   router.get("/api/get-all-tables", tableController.handleGetAllTables);
+  router.post("/api/create-reserve-tables", upload.none(), tableController.handleCreateReserveTable);
 
   // table category product
   router.get("/api/get-all-category", categoryController.handleGetAllCategory);

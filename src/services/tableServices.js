@@ -14,8 +14,6 @@ const getAllTables = (tableId) => {
           where: { id: tableId },
           attributes: {},
         });
-      } else {
-
       }
       resolve(tables);
     } catch (error) {

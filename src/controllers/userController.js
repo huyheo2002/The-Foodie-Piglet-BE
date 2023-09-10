@@ -15,7 +15,7 @@ const handleLoginSuccess = async (req, res) => {
     res.status(200).json({
         message: dataUser.errMsg,
         errCode: dataUser.errCode,
-        user: dataUser.user ? dataUser.user : {}
+        accessToken: dataUser.accessToken ? dataUser.accessToken : {}
     })
     res.end();
     // res.write(req.params.userId);
@@ -82,6 +82,8 @@ const handleCreateNewUser = async (req, res) => {
 }
 
 const handleEditUser = async (req, res) => {
+    console.log("req.body update", req.body);
+    console.log("req.file update", req.file);
     let data = req.body;
     let message = await userServices.editUser(data, req.file);
 
