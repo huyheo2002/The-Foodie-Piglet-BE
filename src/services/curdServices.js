@@ -27,6 +27,19 @@ const createUser = async (data) => {
     })
 
 }
+const createNews = async (data) => {
+    return new Promise(async (resolve, reject) => {
+            await db.News.create({                
+                name: data.name,
+               des:data.des,              
+                news_typeId: data.news_typeId,                
+            })
+            resolve("success create user");
+        
+    })
+
+}
+
 
 const hashPassword = (password) => {
     return new Promise(async (resolve, reject) => {
@@ -41,4 +54,5 @@ const hashPassword = (password) => {
 
 module.exports = {
     createUser: createUser,
+    createNews: createNews,
 } 

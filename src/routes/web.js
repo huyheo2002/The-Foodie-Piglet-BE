@@ -2,6 +2,8 @@ import express from "express";
 import homeController from "../controllers/Home/index";
 import userController from "../controllers/userController";
 import roleController from "../controllers/roleController";
+import newsController from "../controllers/newsController";
+import news_typeController from "../controllers/news_typeController";
 // import passport from "passport";
 // const router = express.Router();
 
@@ -19,6 +21,7 @@ const initWebRoutes = (app) => {
 
   router.get("/curd", homeController.getCURD);
   router.post("/post-curd", homeController.postCURD);
+  router.get("/api/news", homeController.getNews);
 
   router.get("/huydeptrai", (req, res) => {
     return res.send("Hello Huy");
@@ -65,7 +68,16 @@ const initWebRoutes = (app) => {
   router.post("/api/create-user", userController.handleCreateNewUser);
   router.put("/api/edit-user", userController.handleEditUser);
   router.delete("/api/delete-user", userController.handleDeleteUser);
-
+  //table news
+  router.get("/api/get-all-news", newsController.handleGetAllNews);
+  router.get(
+    "/api/get-all-news-compact",
+    newsController.handleGetAllNewsCompact
+  );
+  router.post("/api/create-news", newsController.handleCreateNewNews);
+  router.put("/api/edit-news", newsController.handleEditNews);
+  router.delete("/api/delete-news", newsController.handleDeleteNews);
+  router.get("/api/get-all-news_type", news_typeController.handleGetAllNews_type);
   // table roles
   router.get("/api/get-all-roles", roleController.handleGetAllRoles);
 
