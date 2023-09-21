@@ -9,6 +9,7 @@ const handleGetAllProducts = async (req, res) => {
         if (item.image) {
             item.image = `${process.env.URL_SERVER}/public/product/${item.image}`;
         }
+
         return item
     })
 
@@ -21,13 +22,21 @@ const handleGetAllProducts = async (req, res) => {
 
 const handleGetAllProductsCompact = async (req, res) => {
     let products = await productServices.getAllProductCompact();
-    let newProducts = products.map((item) => {
 
+    let newProducts = products.map((item) => {
         if (item.image) {
             item.image = `${process.env.URL_SERVER}/public/product/${item.image}`;
         }
 
-        console.log("item", item)
+        // if(item.Variants) {
+        //     console.log("oke oke")
+        //     item.price = 500;
+
+        //     delete item.Variants;
+        // }
+
+        // console.log("item", item)
+        // console.log("item.price", item.price)
         return item
     })
 
@@ -48,8 +57,32 @@ const handleCreateNewProduct = async (req, res) => {
     return res.status(200).json(message)
 }
 
+const handleEditProduct = async (req, res) => {
+    console.log("req.body update", req.body);
+    console.log("req.file update", req.file);
+    let data = req.body;
+    let message = await productServices.editProduct(data, req.file);
+
+    return res.status(200).json(message)
+}
+
+const handleDeleteProduct = async (req, res) => {
+    console.log("req.body", res.body)
+    if (!req.body.id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMsg: "Missing required parameter"
+        })
+    }
+    let message = await productServices.deleteProduct(req.body.id);
+
+    return res.status(200).json(message)
+}
+
 module.exports = {
     handleGetAllProducts: handleGetAllProducts,
     handleGetAllProductsCompact: handleGetAllProductsCompact,
-    handleCreateNewProduct: handleCreateNewProduct
+    handleCreateNewProduct: handleCreateNewProduct,
+    handleEditProduct: handleEditProduct,
+    handleDeleteProduct: handleDeleteProduct
 }

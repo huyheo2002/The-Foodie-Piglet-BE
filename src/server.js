@@ -4,6 +4,7 @@ import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./routes/web";
 import connect from "./config/connectDB";
 // import jwtAction from "./middleware/JwtAction";
+import sendMail from "./sendMail";
 
 require("./passport");
 require("dotenv").config();
@@ -19,6 +20,9 @@ app.use(bodyParser.urlencoded({extended: true}))
 // jwtAction.createJwt()
 // let decoded = jwtAction.verifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaHV5IiwiYWRkcmVzcyI6ImjDoCBu4buZaSIsImlhdCI6MTY5MzMwMzk1OH0.gVIZZ9KRVxdf-kLXNHmlJX7q-zneShsNzHjYKNEfKD8")
 // console.log("decoded server:", decoded)
+
+// test send mail
+// sendMail();
 
 viewEngine(app);
 initWebRoutes(app);

@@ -5,6 +5,7 @@ import roleController from "../controllers/roleController";
 import tableController from "../controllers/tableController";
 import categoryController from "../controllers/categoryController";
 import productController from "../controllers/productController";
+import variantController from "../controllers/variantController";
 const multer = require("multer");
 const path = require('path');
 
@@ -100,7 +101,7 @@ const initWebRoutes = (app) => {
     userController.handleCreateNewUser
   );
   router.put("/api/edit-user", upload.single("avatar"), userController.handleEditUser);
-  router.delete("/api/delete-user", upload.none(),userController.handleDeleteUser);
+  router.delete("/api/delete-user", upload.none(), userController.handleDeleteUser);
 
   // table roles
   router.get("/api/get-all-roles", roleController.handleGetAllRoles);
@@ -121,6 +122,20 @@ const initWebRoutes = (app) => {
     upload.single("image"),
     productController.handleCreateNewProduct
   );
+  router.put("/api/edit-product", upload.single("image"), productController.handleEditProduct);
+  router.delete("/api/delete-product", upload.none(), productController.handleDeleteProduct);
+
+  // table variant in product :V
+  // router.get("/api/get-all-product", productController.handleGetAllProducts);
+  router.get("/api/get-all-variant-compact", variantController.handleFindVariantWithIdCompact);
+
+  // router.post(
+  //   "/api/create-product",
+  //   upload.single("image"),
+  //   productController.handleCreateNewProduct
+  // );
+  // router.put("/api/edit-product", upload.single("image"), productController.handleEditProduct);
+  // router.delete("/api/delete-product", upload.none(), productController.handleDeleteProduct);
 
   app.use("/", router);
 };

@@ -217,6 +217,7 @@ const createNewUser = (data, avatar) => {
 const editUser = (data, newAvatar) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log("data user edit", data);
       if (!data.id) {
         resolve({
           errCode: 2,
@@ -225,6 +226,7 @@ const editUser = (data, newAvatar) => {
       }
 
       const idPrim = data.id;
+      console.log("idPrim", idPrim)
       let user = await db.User.findByPk(idPrim);
 
       console.log("user Edit:", user)

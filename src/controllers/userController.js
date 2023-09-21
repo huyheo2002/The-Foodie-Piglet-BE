@@ -48,10 +48,15 @@ const handleGetAllUsers = async (req, res) => {
     let id = req.query.id; 
     let users = await userServices.getAllUsers(id);
     // console.log("users", Array.isArray(users))
-    let newUsers = users.map((item) => {
-        item.avatar = `${process.env.URL_SERVER}/public/avatar/${item.avatar}`;
-        return item
-    })
+
+    let newUsers = users ?? [];
+    if(newUsers.length > 0) {
+        newUsers = users.map((item) => {
+            item.avatar = `${process.env.URL_SERVER}/public/avatar/${item.avatar}`;            
+
+            return item
+        })
+    }
     // console.log("users", users)
     // console.log("newUsers", newUsers)
 

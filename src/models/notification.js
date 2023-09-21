@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Notification extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,54 +11,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsTo(models.Role, { foreignKey: "roleId" });
-      User.hasMany(models.Notification, { foreignKey: "userId" } ); 
+      Notification.belongsTo(models.User, { foreignKey: "userId" });
     }
   }
-  User.init({  
+  Notification.init({
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: true,      
-    },
-    username: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    phone: {
-      type: DataTypes.INTEGER,
+    message: {
+      type: DataTypes.TEXT,
       allowNull: true,
     },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    gender: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    avatar: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    roleId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 4      
     },
     createdAt: {
       type: DataTypes.DATE,   
@@ -67,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       type: DataTypes.DATE,    
       allowNull: false,   
-    },        
+    },  
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'Notification',
   });
-  return User;
+  return Notification;
 };

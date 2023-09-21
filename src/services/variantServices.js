@@ -1,24 +1,23 @@
+import { where } from "sequelize";
 import db from "../models";
 import makeKeyword from "../utils/makeKeyword";
 import generateUniqueId from "../utils/uniqueName";
 const fs = require("fs");
 require("dotenv").config();
 
-const getAllProduct = () => {
+const findVariantWithIdCompact = (productId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let products = await db.Product.findAll({
-                include: [{
-                    model: db.sequelize.models.Category,
-                    attributes: ["name"],
-                }, {
-                    model: db.sequelize.models.Variant,
-                    attributes: ["name", "price", "discountVariant"],
-                }]
+            let variant = await db.Variant.findAll({  
+                attributes: {
+                    exclude: ["keyword", "desc", "createdAt", "updatedAt", "productId"]
+                },              
+                where: {
+                    productId: productId
+                }
             });
-            // console.log("products", products)                    
 
-            resolve(products);
+            resolve(variant);
         } catch (error) {
             console.log(error);
         }
@@ -40,24 +39,6 @@ const getAllProductCompact = () => {
                     exclude: ["keyword", "desc", "createdAt", "updatedAt", "categoryId"]
                 },
             });
-
-            console.log("products in services", Array.isArray(products))
-
-            // let newProducts = Array.isArray(products) === true && products.map((item) => {
-            //     if (item.Variants) {
-            //         console.log("Variants", item.Variants)
-            //         if (item.Variants.length > 0) {
-            //             const totalPrice = item.Variants.reduce((accumulator, currentVariant) => {
-            //                 let priceMax = item.Variants[0].price * (item.Variants[0].name )
-            //                 return accumulator + currentVariant.price;
-            //             }, 0);
-            //         }
-
-            //         item.dataValues.sumPrice = `9999`;
-            //     }
-
-            //     return item
-            // })
             resolve(products);
         } catch (error) {
             console.log(error);
@@ -178,10 +159,10 @@ const editProduct = (data, image) => {
                     keyword: keyword,
                     name: data.name,
                     discount: data.discount,
-                    desc: data.desc,
+                    desc: data.desc,                    
                     categoryId: data.categoryId,
                     image: nameImage ?? oldImage,
-                });
+                });                
 
                 resolve({
                     errCode: 0,
@@ -242,7 +223,7 @@ const deleteProduct = (prodId) => {
 };
 
 module.exports = {
-    getAllProduct: getAllProduct,
+    findVariantWithIdCompact: findVariantWithIdCompact,
     getAllProductCompact: getAllProductCompact,
     createNewProduct: createNewProduct,
     editProduct: editProduct,
