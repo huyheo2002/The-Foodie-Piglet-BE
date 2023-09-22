@@ -1,4 +1,5 @@
 import userServices from "../services/userServices";
+require("dotenv").config();
 
 const handleLoginSuccess = async (req, res) => {
     const email = req.params.email;
@@ -14,7 +15,7 @@ const handleLoginSuccess = async (req, res) => {
     res.status(200).json({
         message: dataUser.errMsg,
         errCode: dataUser.errCode,
-        user: dataUser.user ? dataUser.user : {}
+        accessToken: dataUser.accessToken ? dataUser.accessToken : {}
     })
     res.end();
     // res.write(req.params.userId);
@@ -46,11 +47,23 @@ const handleGetAllUsers = async (req, res) => {
     // post sd: req.body get sd: req.query
     let id = req.query.id; 
     let users = await userServices.getAllUsers(id);
+    // console.log("users", Array.isArray(users))
+
+    let newUsers = users ?? [];
+    if(newUsers.length > 0) {
+        newUsers = users.map((item) => {
+            item.avatar = `${process.env.URL_SERVER}/public/avatar/${item.avatar}`;            
+
+            return item
+        })
+    }
     // console.log("users", users)
+    // console.log("newUsers", newUsers)
+
     return res.status(200).json({
         errCode: 0,
         errMsg: "Ok",
-        users: users
+        users: newUsers
     })
 }
 
@@ -66,15 +79,18 @@ const handleGetAllUsersCompact = async (req, res) => {
 }
 
 const handleCreateNewUser = async (req, res) => {
-    let message = await userServices.createNewUser(req.body);
-    // console.log(message);
+    console.log("req.body create", req.body);
+    console.log("req.file create", req.file);
+    let message = await userServices.createNewUser(req.body, req.file);
 
     return res.status(200).json(message)
 }
 
 const handleEditUser = async (req, res) => {
+    console.log("req.body update", req.body);
+    console.log("req.file update", req.file);
     let data = req.body;
-    let message = await userServices.editUser(data);
+    let message = await userServices.editUser(data, req.file);
 
     return res.status(200).json(message)
 }

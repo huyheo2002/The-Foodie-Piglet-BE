@@ -73,11 +73,12 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
+    let hashPasswordFromBcrypt = hashPassword("123");
     return queryInterface.bulkDelete('Users', null, [{
       name: 'Văn Huy',
       email: "huy12@gmail.com",
       username: "huyadmin",
-      password: "123",
+      password: hashPasswordFromBcrypt,
       phone: "01234567899",
       address: "Hà Nội",
       gender: 1,
@@ -89,7 +90,7 @@ module.exports = {
       name: 'Văn Huy',
       email: "huy12@gmail.com",
       username: "huyuser",
-      password: "123",
+      password: hashPasswordFromBcrypt,
       phone: "01234567899",
       address: "Hà Nội",
       gender: 1,
@@ -101,7 +102,7 @@ module.exports = {
       name: 'Văn Huy',
       email: "huy12@gmail.com",
       username: "huystaff",
-      password: "123",
+      password: hashPasswordFromBcrypt,
       phone: "01234567899",
       address: "Hà Nội",
       gender: 1,
@@ -113,7 +114,7 @@ module.exports = {
       name: 'Văn Huy',
       email: "huy12@gmail.com",
       username: "huymanager",
-      password: "123",
+      password: hashPasswordFromBcrypt,
       phone: "01234567899",
       address: "Hà Nội",
       gender: 1,

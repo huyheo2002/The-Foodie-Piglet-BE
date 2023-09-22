@@ -1,8 +1,10 @@
 import db from "../models";
 import bcrypt from "bcryptjs";
 import jwtAction from "../middleware/JwtAction";
+const fs = require("fs");
 require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
+import generateUniqueId from "../utils/uniqueName";
 
 const handleUserLogin = (username, password) => {
   return new Promise(async (resolve, reject) => {
@@ -36,9 +38,9 @@ const handleUserLogin = (username, password) => {
             // jwt
             let payload = {
               user: user,
-              expiresIn: process.env.JWT_EXPIRES_IN
-            }
-            let token = jwtAction.createJwt(payload)
+              expiresIn: process.env.JWT_EXPIRES_IN,
+            };
+            let token = jwtAction.createJwt(payload);
             dataUser.accessToken = token;
           } else {
             dataUser.errCode = 3;
@@ -54,7 +56,7 @@ const handleUserLogin = (username, password) => {
           "You'r email isn't exist in your system. Pls try other email";
       }
 
-      console.log("dataUser: ", dataUser)
+      console.log("dataUser: ", dataUser);
       resolve(dataUser);
     } catch (error) {
       reject(error);
@@ -158,7 +160,7 @@ const hashPassword = (password) => {
   });
 };
 
-const createNewUser = (data) => {
+const createNewUser = (data, avatar) => {
   return new Promise(async (resolve, reject) => {
     try {
       // check username is exits
@@ -172,6 +174,24 @@ const createNewUser = (data) => {
         });
       }
 
+      let nameImage = null;
+      if (avatar) {
+        let binaryData = avatar.buffer;
+        nameImage =
+          generateUniqueId() + avatar.originalname || "data.bin";
+        // avatarPath += nameImage;
+        let filePath = `src/public/images/avatar/${nameImage}`;
+        fs.writeFile(filePath, binaryData, "binary", (err) => {
+          if (err) {
+            console.error("Error writing file:", err);
+          } else {
+            console.log("File saved successfully:", filePath);
+          }
+        });
+      }
+
+      // console.log("nameImage", nameImage)
+
       let hashPasswordFromBcrypt = await hashPassword(data.password);
       await db.User.create({
         name: data.name,
@@ -182,6 +202,7 @@ const createNewUser = (data) => {
         address: data.address,
         gender: data.gender === "1" ? true : false,
         roleId: data.roleId,
+        avatar: nameImage
       });
       resolve({
         errCode: 0,
@@ -193,13 +214,10 @@ const createNewUser = (data) => {
   });
 };
 
-const editUser = (data) => {
+const editUser = (data, newAvatar) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // let hashPasswordFromBcrypt;
-      // if (data.password) {
-      //   hashPasswordFromBcrypt = await hashPassword(data.password);
-      // }
+      console.log("data user edit", data);
       if (!data.id) {
         resolve({
           errCode: 2,
@@ -207,13 +225,42 @@ const editUser = (data) => {
         });
       }
 
-      // let user = await db.User.findOne({
-      //   where: { id: data.id },
-      //   raw: false,
-      // });
       const idPrim = data.id;
+      console.log("idPrim", idPrim)
       let user = await db.User.findByPk(idPrim);
+
+      console.log("user Edit:", user)
       if (user) {
+        console.log("user tồn tại")
+        let oldImage = user.avatar;
+        let nameImage = null;
+        if (newAvatar) {
+          // xoá ảnh cũ
+          if(user.avatar) {
+            let filePathOld = `src/public/images/avatar/${user.avatar}`;
+            fs.unlink(filePathOld, (err) => {
+              if (err) {
+                console.error(err);
+                // return res.status(500).send('Error deleting the file');
+              }
+            });
+          }
+
+          // tạo mới link ảnh
+          let binaryData = newAvatar.buffer;
+          nameImage =
+            generateUniqueId() + newAvatar.originalname || "data.bin";
+          // avatarPath += nameImage;
+          let filePathNew = `src/public/images/avatar/${nameImage}`;
+          fs.writeFile(filePathNew, binaryData, "binary", (err) => {
+            if (err) {
+              console.error("Error writing file:", err);
+            } else {
+              console.log("File saved successfully:", filePathNew);
+            }
+          });
+        }        
+
         await user.update({
           name: data.name,
           email: data.email,
@@ -223,8 +270,8 @@ const editUser = (data) => {
           address: data.address,
           gender: data.gender,
           roleId: data.roleId,
-          avatar: data.avatar,
-        });
+          avatar: nameImage ?? oldImage,
+        });        
 
         resolve({
           errCode: 0,
@@ -237,7 +284,6 @@ const editUser = (data) => {
           message: "User not found",
         });
       }
-            
     } catch (error) {
       reject(error);
     }
@@ -257,6 +303,16 @@ const deleteUser = (userId) => {
         });
       }
 
+      if(user.avatar) {
+        let filePathOld = `src/public/images/avatar/${user.avatar}`;
+        fs.unlink(filePathOld, (err) => {
+          if (err) {
+            console.error(err);
+            // return res.status(500).send('Error deleting the file');
+          }
+        });
+      }
+
       await db.User.destroy({
         where: { id: userId },
       });
@@ -271,30 +327,38 @@ const deleteUser = (userId) => {
   });
 };
 
+// error
 const userLoginGoogleSuccess = (email) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("vaiz mèm :v")
+      let dataUser = {};
       let user = await db.User.findOne({
         where: { email: email },
       });
       if (!user) {
-        resolve({
-          errCode: 2,
-          errMsg: "The user isn't exits",
-        });
-      }      
+        dataUser.errCode = 1;
+        dataUser.message = "Login fail";
+        
+        resolve(dataUser);
+      }
 
-      resolve({
-        errCode: 0,
-        message: "Login success",
-        user: user
-      });
+      // jwt
+      let payload = {
+        user: user,
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      };
+      let token = jwtAction.createJwt(payload);
+      dataUser.accessToken = token;
+      dataUser.errCode = 0;
+      dataUser.message = "Login success";
+      
+      console.log("dataUser google: ", dataUser);
+      resolve(dataUser);
     } catch (error) {
       reject(error);
     }
   });
-}
+};
 
 module.exports = {
   handleUserLogin: handleUserLogin,

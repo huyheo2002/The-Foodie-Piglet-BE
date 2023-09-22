@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Drink extends Model {
+  class Variant extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,39 +11,31 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Drink.belongsTo(models["Category"]);
+      Variant.belongsTo(models["Product"], { foreignKey: "productId" });
     }
   }
-  Drink.init({
+  Variant.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
-    },
-    keyword: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
+    },    
     name: {
       allowNull: false,
       type: DataTypes.STRING
     },
-    thumbnail: {
+    price: {
       allowNull: false,
-      type: DataTypes.STRING
-    },
-    discount: {
+      type: DataTypes.FLOAT
+    },    
+    discountVariant: {
       allowNull: true,
       type: DataTypes.INTEGER
     },
-    desc: {
-      allowNull: false,
-      type: DataTypes.TEXT
-    },
-    categoryId: {
+    productId: {
       type: DataTypes.INTEGER,
-      allowNull: true,      
+      allowNull: false,      
     },
     createdAt: {
       allowNull: false,
@@ -55,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Drink',
+    modelName: 'Variant',
   });
-  return Drink;
+  return Variant;
 };

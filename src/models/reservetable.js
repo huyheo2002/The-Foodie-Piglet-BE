@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Food extends Model {
+  class ReserveTable extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,55 +11,51 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Food.belongsTo(models["Category"]);
+      ReserveTable.belongsTo(models.Tables, { foreignKey: "idTable" });
     }
   }
-  Food.init({
+  ReserveTable.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    keyword: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
-    thumbnail: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
-    price: {
-      allowNull: false,
-      type: DataTypes.FLOAT
-    },
-    discount: {
-      allowNull: true,
-      type: DataTypes.INTEGER
-    },
-    desc: {
-      allowNull: false,
-      type: DataTypes.TEXT
-    },
-    categoryId: {
+    idTable: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    createdAt: {
+    name: {
+      type: DataTypes.STRING,
       allowNull: false,
-      type: DataTypes.DATE
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    dateStart: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    dateEnd: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,   
+      allowNull: false,   
     },
     updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    }
+      type: DataTypes.DATE,    
+      allowNull: false,   
+    },
   }, {
     sequelize,
-    modelName: 'Food',
+    modelName: 'ReserveTable',
   });
-  return Food;
+  return ReserveTable;
 };

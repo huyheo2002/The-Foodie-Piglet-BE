@@ -25,7 +25,6 @@ const createUser = async (data) => {
             reject(error)
         }
     })
-
 }
 const createNews = async (data) => {
     return new Promise(async (resolve, reject) => {
