@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('News_type', {
+    await queryInterface.createTable('News', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,6 +12,24 @@ module.exports = {
       name: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      image: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      desc: {
+        allowNull: true,
+        type: Sequelize.TEXT
+      },
+      genreId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: {
+            tableName: "Genres",
+          },
+          key: "id",
+        }
       },
       createdAt: {
         allowNull: false,
@@ -24,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('News_type');
+    await queryInterface.dropTable('News');
   }
 };

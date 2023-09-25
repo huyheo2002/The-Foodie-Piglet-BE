@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class News extends Model {
+  class New extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,45 +11,43 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      News.belongsTo(models.News_type, { foreignKey: "news_typeId" });
+      New.belongsTo(models.Genre, { foreignKey: "genreId" });
     }
   }
-  News.init({
+  New.init({
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
+      type: DataTypes.INTEGER
     },
     name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    des: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    
-    avatar: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    news_typeId: {
-      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 4      
+      type: DataTypes.STRING
+    },
+    image: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    desc: {
+      allowNull: true,
+      type: DataTypes.TEXT
+    },
+    genreId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     createdAt: {
-      type: DataTypes.DATE,   
-      allowNull: false,   
+      allowNull: false,
+      type: DataTypes.DATE
     },
     updatedAt: {
-      type: DataTypes.DATE,    
-      allowNull: false,   
-    },        
+      allowNull: false,
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
-    modelName: 'News',
+    modelName: 'New',
   });
-  return News;
+  return New;
 };

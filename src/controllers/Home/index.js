@@ -29,9 +29,9 @@ const getUsers = async (req, res) => {
         console.log("Cant connect DB: ", error);
     }
 }
-const getNews = async (req, res) => {
+const getNew = async (req, res) => {
     try {
-        let data = await db.News.findAll();        
+        let data = await db.New.findAll();        
         // console.log(data);
         res.status(200);
         res.setHeader('content-type', 'application/json');
@@ -71,5 +71,5 @@ module.exports = {
     getUsers: getUsers,
     getCURD: getCURD,
     postCURD: postCURD,
-    getNews: getNews,
+    getNew: getNew,
 }
