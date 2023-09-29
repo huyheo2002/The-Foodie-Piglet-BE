@@ -6,6 +6,7 @@ import tableController from "../controllers/tableController";
 import categoryController from "../controllers/categoryController";
 import productController from "../controllers/productController";
 import variantController from "../controllers/variantController";
+import newController from "../controllers/newController";
 const multer = require("multer");
 const path = require('path');
 
@@ -28,6 +29,7 @@ const initWebRoutes = (app) => {
 
   router.get("/curd", homeController.getCURD);
   router.post("/post-curd", homeController.postCURD);
+  router.get("/api/new", homeController.getNew);
 
   router.get("/huydeptrai", (req, res) => {
     return res.send("Hello Huy");
@@ -86,6 +88,11 @@ const initWebRoutes = (app) => {
     console.log("imagePath", imagePath)
     res.sendFile(imagePath);
   });
+  router.get("/public/News/:filename", (req, res) => {
+    const imagePath = path.join(__dirname, `../public/images/News/${req.params.filename}`);
+    console.log("imagePath", imagePath)
+    res.sendFile(imagePath);
+  });
 
   // api sd ben react
   // table user
@@ -102,6 +109,19 @@ const initWebRoutes = (app) => {
   );
   router.put("/api/edit-user", upload.single("avatar"), userController.handleEditUser);
   router.delete("/api/delete-user", upload.none(), userController.handleDeleteUser);
+  // table new
+  router.get("/api/get-all-news", newController.handleGetAllNews);
+  router.get(
+    "/api/get-all-news-compact",
+    newController.handleGetAllNewsCompact
+  );
+  router.post(
+    "/api/create-new",
+    upload.single("image"),
+    newController.handleCreateNewNews
+  );
+  router.put("/api/edit-new", upload.single("image"), newController.handleEditNew);
+  router.delete("/api/delete-new", upload.none(), newController.handleDeleteNew);
 
   // table roles
   router.get("/api/get-all-roles", roleController.handleGetAllRoles);
