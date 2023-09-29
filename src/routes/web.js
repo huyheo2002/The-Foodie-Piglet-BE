@@ -126,16 +126,16 @@ const initWebRoutes = (app) => {
   router.delete("/api/delete-product", upload.none(), productController.handleDeleteProduct);
 
   // table variant in product :V
-  // router.get("/api/get-all-product", productController.handleGetAllProducts);
   router.get("/api/get-all-variant-compact", variantController.handleFindVariantWithIdCompact);
+  router.get("/api/get-one-variant-compact", variantController.handleFindOneVariantWithIdCompact);
 
-  // router.post(
-  //   "/api/create-product",
-  //   upload.single("image"),
-  //   productController.handleCreateNewProduct
-  // );
-  // router.put("/api/edit-product", upload.single("image"), productController.handleEditProduct);
-  // router.delete("/api/delete-product", upload.none(), productController.handleDeleteProduct);
+  router.post(
+    "/api/create-variant-product",
+    upload.none(),
+    variantController.handleCreateNewVariantInProduct
+  );
+  router.put("/api/edit-variant-product", upload.none(), variantController.handleEditVariantInProduct);
+  router.delete("/api/delete-variant-product", upload.none(), variantController.handleDeleteVariantInProduct);
 
   app.use("/", router);
 };

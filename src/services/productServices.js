@@ -41,23 +41,6 @@ const getAllProductCompact = () => {
                 },
             });
 
-            console.log("products in services", Array.isArray(products))
-
-            // let newProducts = Array.isArray(products) === true && products.map((item) => {
-            //     if (item.Variants) {
-            //         console.log("Variants", item.Variants)
-            //         if (item.Variants.length > 0) {
-            //             const totalPrice = item.Variants.reduce((accumulator, currentVariant) => {
-            //                 let priceMax = item.Variants[0].price * (item.Variants[0].name )
-            //                 return accumulator + currentVariant.price;
-            //             }, 0);
-            //         }
-
-            //         item.dataValues.sumPrice = `9999`;
-            //     }
-
-            //     return item
-            // })
             resolve(products);
         } catch (error) {
             console.log(error);
@@ -92,14 +75,10 @@ const createNewProduct = (data, image) => {
             let newProduct = await db.Product.create({
                 keyword: keyword,
                 name: data.name,
-                discount: data.discount,
                 desc: data.desc,
                 categoryId: data.categoryId,
                 image: nameImage
-            });
-
-            console.log("newProduct", newProduct)
-            console.log("newProduct id", newProduct.id)
+            });            
 
             if (newProduct) {
                 let newVariant = await db.Variant.create({
@@ -140,7 +119,6 @@ const editProduct = (data, image) => {
 
             // console.log("product Edit:", product)
             if (product) {
-                console.log("product tồn tại")
                 let oldImage = product.image;
                 let nameImage = null;
                 if (image) {
@@ -177,7 +155,6 @@ const editProduct = (data, image) => {
                 await product.update({
                     keyword: keyword,
                     name: data.name,
-                    discount: data.discount,
                     desc: data.desc,
                     categoryId: data.categoryId,
                     image: nameImage ?? oldImage,

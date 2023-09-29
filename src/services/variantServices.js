@@ -8,13 +8,14 @@ require("dotenv").config();
 const findVariantWithIdCompact = (productId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let variant = await db.Variant.findAll({  
+            let variant = await db.Variant.findAll({
                 attributes: {
                     exclude: ["keyword", "desc", "createdAt", "updatedAt", "productId"]
-                },              
+                },
                 where: {
                     productId: productId
-                }
+                },
+                order: [['name', 'DESC'], ['price', 'DESC']]
             });
 
             resolve(variant);
@@ -24,79 +25,59 @@ const findVariantWithIdCompact = (productId) => {
     })
 }
 
-const getAllProductCompact = () => {
+const findOneVariantWithIdCompact = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let products = await db.Product.findAll({
-                include: [{
-                    model: db.sequelize.models.Category,
-                    attributes: ["name"],
-                }, {
-                    model: db.sequelize.models.Variant,
-                    attributes: ["name", "price", "discountVariant"],
-                }],
+            let variant = await db.Variant.findOne({
                 attributes: {
-                    exclude: ["keyword", "desc", "createdAt", "updatedAt", "categoryId"]
+                    exclude: ["keyword", "desc", "createdAt", "updatedAt", "productId"]
                 },
+                where: {
+                    id: id
+                },
+                order: [['name', 'DESC'], ['price', 'DESC']]
             });
-            resolve(products);
+
+            resolve(variant);
         } catch (error) {
             console.log(error);
         }
     })
 }
 
-const createNewProduct = (data, image) => {
+const createNewVariantInProduct = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let nameImage = null;
-            if (image) {
-                let binaryData = image.buffer;
-                nameImage =
-                    generateUniqueId() + image.originalname || "data.bin";
-                let filePath = `src/public/images/product/${nameImage}`;
-                fs.writeFile(filePath, binaryData, "binary", (err) => {
-                    if (err) {
-                        console.error("Error writing file:", err);
-                    } else {
-                        console.log("File saved successfully:", filePath);
+            let variant = null;
+            if (data.productId && data.size) {
+                variant = await db.Variant.findOne({
+                    where: {
+                        productId: data.productId,
+                        name: data.size
                     }
                 });
-            }
 
-            // make keyword
-            let keyword = null;
-            if (data && data.name) {
-                keyword = makeKeyword(data.name)
-            }
-
-            let newProduct = await db.Product.create({
-                keyword: keyword,
-                name: data.name,
-                discount: data.discount,
-                desc: data.desc,
-                categoryId: data.categoryId,
-                image: nameImage
-            });
-
-            console.log("newProduct", newProduct)
-            console.log("newProduct id", newProduct.id)
-
-            if (newProduct) {
-                let newVariant = await db.Variant.create({
-                    // name (size) S M L 
-                    name: data.size ?? "S",
-                    price: data.price ?? 200,
-                    discountVariant: data.discountVariant ?? null,
-                    productId: newProduct.id
-                })
-
-                console.log("newVariant", newVariant)
+                if (variant) {
+                    await variant.update({
+                        name: data.size,
+                        price: data.price,
+                        discountVariant: data.discountVariant ?? null,
+                        productId: data.productId,
+                    });
+                } else {
+                    await db.Variant.create({
+                        name: data.size,
+                        price: data.price,
+                        discountVariant: data.discountVariant ?? null,
+                        productId: data.productId,
+                    });
+                }
             }
 
             resolve({
                 errCode: 0,
                 message: "Ok",
+                variant: variant
             });
         } catch (error) {
             reject(error);
@@ -104,75 +85,40 @@ const createNewProduct = (data, image) => {
     });
 };
 
-const editProduct = (data, image) => {
+const editVariantInProduct = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log("data product edit", data);
-            if (!data.id) {
+            if (!data.productId || !data.size) {
                 resolve({
                     errCode: 2,
                     message: "Missing required parameter",
                 });
             }
 
-            const idPrim = data.id;
-            console.log("idPrim", idPrim)
-            let product = await db.Product.findByPk(idPrim);
-
-            // console.log("product Edit:", product)
-            if (product) {
-                console.log("product tồn tại")
-                let oldImage = product.image;
-                let nameImage = null;
-                if (image) {
-                    // xoá ảnh cũ
-                    if (product.image) {
-                        let filePathOld = `src/public/images/product/${product.image}`;
-                        fs.unlink(filePathOld, (err) => {
-                            if (err) {
-                                console.error(err);
-                                // return res.status(500).send('Error deleting the file');
-                            }
-                        });
-                    }
-
-                    // tạo mới link ảnh
-                    let binaryData = image.buffer;
-                    nameImage =
-                        generateUniqueId() + image.originalname || "data.bin";
-                    let filePathNew = `src/public/images/product/${nameImage}`;
-                    fs.writeFile(filePathNew, binaryData, "binary", (err) => {
-                        if (err) {
-                            console.error("Error writing file:", err);
-                        } else {
-                            console.log("File saved successfully:", filePathNew);
-                        }
-                    });
+            let variant = await db.Variant.findOne({
+                where: {
+                    productId: data.productId,
+                    name: data.size
                 }
+            });
 
-                let keyword = null;
-                if (data && data.name) {
-                    keyword = makeKeyword(data.name)
-                }
-
-                await product.update({
-                    keyword: keyword,
-                    name: data.name,
-                    discount: data.discount,
-                    desc: data.desc,                    
-                    categoryId: data.categoryId,
-                    image: nameImage ?? oldImage,
-                });                
+            if (variant) {
+                await variant.update({
+                    name: data.size,
+                    price: data.price,
+                    discountVariant: data.discountVariant ?? null,
+                    productId: data.productId,
+                });
 
                 resolve({
                     errCode: 0,
                     message: "Ok",
-                    product: product,
+                    variant: variant,
                 });
             } else {
                 resolve({
                     errCode: 1,
-                    message: "Product not found",
+                    message: "Variant in Product not found",
                 });
             }
         } catch (error) {
@@ -181,40 +127,30 @@ const editProduct = (data, image) => {
     });
 };
 
-const deleteProduct = (prodId) => {
+const deleteVariantInProduct = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.Variant.destroy({
-                where: { productId: prodId },
+            let variant = await db.Variant.findOne({
+                where: {
+                    // productId: data.productId,
+                    id: data.id
+                }
             });
 
-            let product = await db.Product.findOne({
-                where: { id: prodId },
-            });
-            if (!product) {
+            if(variant) {
+                await db.Variant.destroy({
+                    where: { id: data.id },
+                });                                 
+            } else {
                 resolve({
                     errCode: 2,
-                    errMsg: "The product isn't exits",
+                    errMsg: "The variant in product isn't exits",
                 });
             }
-
-            if (product.image) {
-                let filePathOld = `src/public/images/product/${product.image}`;
-                fs.unlink(filePathOld, (err) => {
-                    if (err) {
-                        console.error(err);
-                        // return res.status(500).send('Error deleting the file');
-                    }
-                });
-            }
-
-            await db.Product.destroy({
-                where: { id: prodId },
-            });
 
             resolve({
                 errCode: 0,
-                message: "The products is deleted",
+                message: "The variant in products is deleted",
             });
         } catch (error) {
             reject(error);
@@ -224,8 +160,8 @@ const deleteProduct = (prodId) => {
 
 module.exports = {
     findVariantWithIdCompact: findVariantWithIdCompact,
-    getAllProductCompact: getAllProductCompact,
-    createNewProduct: createNewProduct,
-    editProduct: editProduct,
-    deleteProduct: deleteProduct
+    createNewVariantInProduct: createNewVariantInProduct,
+    editVariantInProduct: editVariantInProduct,
+    deleteVariantInProduct: deleteVariantInProduct,
+    findOneVariantWithIdCompact: findOneVariantWithIdCompact
 }

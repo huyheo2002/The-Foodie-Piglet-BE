@@ -33,11 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     image: {
       allowNull: true,
       type: DataTypes.STRING
-    },
-    discount: {
-      allowNull: true,
-      type: DataTypes.INTEGER
-    },
+    },    
     desc: {
       allowNull: true,
       type: DataTypes.TEXT

@@ -20,11 +20,7 @@ module.exports = {
       image: {
         allowNull: true,
         type: Sequelize.STRING
-      },
-      discount: {
-        allowNull: true,
-        type: Sequelize.INTEGER
-      },
+      },      
       desc: {
         allowNull: true,
         type: Sequelize.TEXT

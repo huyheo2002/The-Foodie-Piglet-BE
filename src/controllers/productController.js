@@ -27,20 +27,9 @@ const handleGetAllProductsCompact = async (req, res) => {
         if (item.image) {
             item.image = `${process.env.URL_SERVER}/public/product/${item.image}`;
         }
-
-        // if(item.Variants) {
-        //     console.log("oke oke")
-        //     item.price = 500;
-
-        //     delete item.Variants;
-        // }
-
-        // console.log("item", item)
-        // console.log("item.price", item.price)
+                
         return item
     })
-
-    // let productFinal = 
 
     return res.status(200).json({
         errCode: 0,
