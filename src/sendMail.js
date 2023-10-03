@@ -10,7 +10,7 @@ const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 const oAuth2Client = new google.auth.OAuth2(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, REDIRECT_URI);
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const sendMail = async (mailReceive, title, text, html) => {
+const sendMail = async (mailReceive, titleReceive, textReceive, htmlReceive) => {
     try {
         const accessToken = await oAuth2Client.getAccessToken();
         const transport = nodemailer.createTransport({
@@ -28,9 +28,9 @@ const sendMail = async (mailReceive, title, text, html) => {
         const info = await transport.sendMail({
             from: '"TheFoodiePiglet Demo 👻" <thefoodiepiglet@gmail.com>', // sender address
             to: mailReceive,
-            subject: title,
-            text: text,
-            html: html,
+            subject: titleReceive,
+            text: textReceive,
+            html: htmlReceive,
 
             // base
             // to: "nguyenvanhuy150602@gmail.com", // list of receivers

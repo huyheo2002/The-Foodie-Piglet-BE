@@ -14,10 +14,8 @@ const getAllNewsCompact = (newId) => {
         news = await db.New.findAll({
           attributes: {
             exclude: [
-
               "createdAt",
               "updatedAt",
-              
             ],
           },
         });
@@ -26,11 +24,11 @@ const getAllNewsCompact = (newId) => {
           where: { id: newId },
           attributes: {
             exclude: [
-                "name",
-                "desc",
-                "image",
-                "createdAt",
-                "updatedAt",
+              "name",
+              "desc",
+              "image",
+              "createdAt",
+              "updatedAt",
             ],
           },
         });
@@ -51,10 +49,9 @@ const getAllNews = (newId) => {
         news = await db.New.findAll({
           attributes: {
             exclude: [
-
               "createdAt",
               "updatedAt",
-              ],
+            ],
           },
         });
       } else if (newId && newId !== "all") {
@@ -67,10 +64,9 @@ const getAllNews = (newId) => {
               "image",
               "createdAt",
               "updatedAt",
-              ],
+            ],
           },
         });
-      } else {
       }
       resolve(news);
     } catch (error) {
@@ -88,7 +84,7 @@ const createNewNews = (data, image) => {
         nameImage =
           generateUniqueId() + image.originalname || "data.bin";
         // imagePath += nameImage;
-        let filePath = `src/public/images/News/${nameImage}`;
+        let filePath = `src/public/images/news/${nameImage}`;
         fs.writeFile(filePath, binaryData, "binary", (err) => {
           if (err) {
             console.error("Error writing file:", err);
@@ -101,7 +97,7 @@ const createNewNews = (data, image) => {
       // console.log("nameImage", nameImage)
       await db.New.create({
         name: data.name,
-        desc:data.desc,
+        desc: data.desc,
         genreId: data.genreId,
         image: nameImage
       });
@@ -137,8 +133,8 @@ const editNew = (data, newImage) => {
         let nameImage = null;
         if (newImage) {
           // xoá ảnh cũ
-          if(news.image) {
-            let filePathOld = `src/public/images/News/${news.image}`;
+          if (news.image) {
+            let filePathOld = `src/public/images/news/${news.image}`;
             fs.unlink(filePathOld, (err) => {
               if (err) {
                 console.error(err);
@@ -152,7 +148,7 @@ const editNew = (data, newImage) => {
           nameImage =
             generateUniqueId() + newImage.originalname || "data.bin";
           // avatarPath += nameImage;
-          let filePathNew = `src/public/images/News/${nameImage}`;
+          let filePathNew = `src/public/images/news/${nameImage}`;
           fs.writeFile(filePathNew, binaryData, "binary", (err) => {
             if (err) {
               console.error("Error writing file:", err);
@@ -160,14 +156,14 @@ const editNew = (data, newImage) => {
               console.log("File saved successfully:", filePathNew);
             }
           });
-        }        
+        }
 
         await news.update({
           name: data.name,
-          desc:data.desc,
+          desc: data.desc,
           genreId: data.genreId,
           image: nameImage ?? oldImage,
-        });        
+        });
 
         resolve({
           errCode: 0,
@@ -199,8 +195,8 @@ const deleteNew = (newId) => {
         });
       }
 
-      if(news.image) {
-        let filePathOld = `src/public/images/News/${news.image}`;
+      if (news.image) {
+        let filePathOld = `src/public/images/news/${news.image}`;
         fs.unlink(filePathOld, (err) => {
           if (err) {
             console.error(err);
@@ -224,7 +220,6 @@ const deleteNew = (newId) => {
 };
 
 module.exports = {
- 
   getAllNews: getAllNews,
   createNewNews: createNewNews,
   getAllNewsCompact: getAllNewsCompact,

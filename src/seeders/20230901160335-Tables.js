@@ -5,7 +5,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Tables', [{
       name: 'DC1',
-      taken: true,
+      taken: false,
       createdAt: new Date(),
       updatedAt: new Date()
     }, {

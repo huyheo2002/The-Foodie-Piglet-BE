@@ -11,7 +11,7 @@ const handleGetAllNews = async (req, res) => {
     let newNews = news ?? [];
     if(newNews.length > 0) {
         newNews = news.map((item) => {
-            item.image = `${process.env.URL_SERVER}/public/News/${item.image}`;            
+            item.image = `${process.env.URL_SERVER}/public/news/${item.image}`;            
 
             return item
         })

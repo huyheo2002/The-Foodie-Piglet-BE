@@ -7,6 +7,7 @@ import categoryController from "../controllers/categoryController";
 import productController from "../controllers/productController";
 import variantController from "../controllers/variantController";
 import newController from "../controllers/newController";
+import genresController from "../controllers/genreController";
 const multer = require("multer");
 const path = require('path');
 
@@ -88,8 +89,8 @@ const initWebRoutes = (app) => {
     console.log("imagePath", imagePath)
     res.sendFile(imagePath);
   });
-  router.get("/public/News/:filename", (req, res) => {
-    const imagePath = path.join(__dirname, `../public/images/News/${req.params.filename}`);
+  router.get("/public/news/:filename", (req, res) => {
+    const imagePath = path.join(__dirname, `../public/images/news/${req.params.filename}`);
     console.log("imagePath", imagePath)
     res.sendFile(imagePath);
   });
@@ -109,6 +110,8 @@ const initWebRoutes = (app) => {
   );
   router.put("/api/edit-user", upload.single("avatar"), userController.handleEditUser);
   router.delete("/api/delete-user", upload.none(), userController.handleDeleteUser);
+  // table genres 
+  router.get("/api/get-all-genres", genresController.handleGetAllGenres);
   // table new
   router.get("/api/get-all-news", newController.handleGetAllNews);
   router.get(
