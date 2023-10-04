@@ -139,6 +139,7 @@ const initWebRoutes = (app) => {
   // table products
   router.get("/api/get-all-product", productController.handleGetAllProducts);
   router.get("/api/get-all-product-compact", productController.handleGetAllProductsCompact);
+  router.get("/api/find-one-product", productController.handleFindOneProduct);
 
   router.post(
     "/api/create-product",
