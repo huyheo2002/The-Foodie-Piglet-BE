@@ -48,6 +48,30 @@ const getAllProductCompact = () => {
     })
 }
 
+const findOneProduct = (prodId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let products = await db.Product.findOne({
+                include: [{
+                    model: db.sequelize.models.Category,
+                    attributes: ["name"],
+                }, {
+                    model: db.sequelize.models.Variant,
+                    attributes: ["name", "price", "discountVariant"],
+                }],
+                where: {
+                    id: prodId
+                }
+            });
+
+            resolve(products);
+        } catch (error) {
+            // console.log(error);
+            reject(error);
+        }
+    })
+}
+
 const createNewProduct = (data, image) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -223,5 +247,6 @@ module.exports = {
     getAllProductCompact: getAllProductCompact,
     createNewProduct: createNewProduct,
     editProduct: editProduct,
-    deleteProduct: deleteProduct
+    deleteProduct: deleteProduct,
+    findOneProduct: findOneProduct,
 }

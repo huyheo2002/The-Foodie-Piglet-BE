@@ -9,7 +9,6 @@ const handleGetAllProducts = async (req, res) => {
         if (item.image) {
             item.image = `${process.env.URL_SERVER}/public/product/${item.image}`;
         }
-
         return item
     })
 
@@ -26,10 +25,26 @@ const handleGetAllProductsCompact = async (req, res) => {
     let newProducts = products.map((item) => {
         if (item.image) {
             item.image = `${process.env.URL_SERVER}/public/product/${item.image}`;
-        }
-                
+        }        
+
         return item
     })
+
+    return res.status(200).json({
+        errCode: 0,
+        errMsg: "Ok",
+        products: newProducts
+    })
+}
+
+const handleFindOneProduct = async (req, res) => {
+    let id = req.query.id;
+    let products = await productServices.findOneProduct(id);
+
+    let newProducts = products ?? null;
+    if(newProducts) {
+        newProducts.image = `${process.env.URL_SERVER}/public/product/${newProducts.image}`;
+    }
 
     return res.status(200).json({
         errCode: 0,
@@ -73,5 +88,6 @@ module.exports = {
     handleGetAllProductsCompact: handleGetAllProductsCompact,
     handleCreateNewProduct: handleCreateNewProduct,
     handleEditProduct: handleEditProduct,
-    handleDeleteProduct: handleDeleteProduct
+    handleDeleteProduct: handleDeleteProduct,
+    handleFindOneProduct: handleFindOneProduct
 }
