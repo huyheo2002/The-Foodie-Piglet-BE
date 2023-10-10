@@ -8,6 +8,8 @@ import productController from "../controllers/productController";
 import variantController from "../controllers/variantController";
 import newController from "../controllers/newController";
 import genresController from "../controllers/genreController";
+import cartController from "../controllers/cartController";
+
 const multer = require("multer");
 const path = require('path');
 
@@ -161,6 +163,18 @@ const initWebRoutes = (app) => {
   router.put("/api/edit-variant-product", upload.none(), variantController.handleEditVariantInProduct);
   router.delete("/api/delete-variant-product", upload.none(), variantController.handleDeleteVariantInProduct);
 
+  // table cart 
+  router.get("/api/get-all-cart", cartController.handleGetAllCart);
+  router.get("/api/get-all-cartItem-of-user", cartController.handleGetAllCartItemOfUser);
+
+  router.post(
+    "/api/add-to-cart",
+    upload.none(),
+    cartController.handleAddToCart
+  );
+  router.delete("/api/delete-item-in-cart", upload.none(), cartController.handleDeleteItemInCart);
+  router.delete("/api/refresh-cart", upload.none(), cartController.handleRefreshCart);
+  
   app.use("/", router);
 };
 

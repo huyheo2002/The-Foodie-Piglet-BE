@@ -168,7 +168,7 @@ module.exports = {
       name: 'L',
       price:12,
       discountVariant:7,
-      productId:9,
+      productId:8,
       createdAt: new Date(),
       updatedAt: new Date()
     },{
