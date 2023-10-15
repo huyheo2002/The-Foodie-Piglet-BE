@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      New.belongsTo(models.Genre, { foreignKey: "genreId" });
+      New.belongsTo(models["Genre"], { foreignKey: "genreId" });
     }
   }
   New.init({

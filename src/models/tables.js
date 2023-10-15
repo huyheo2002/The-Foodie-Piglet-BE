@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Tables.hasMany(models.ReserveTable, { foreignKey: "idTable" } );      
+      Tables.hasMany(models["ReserveTable"], { foreignKey: "idTable" } );      
     }
   }
   Tables.init({

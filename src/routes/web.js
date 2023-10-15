@@ -9,6 +9,8 @@ import variantController from "../controllers/variantController";
 import newController from "../controllers/newController";
 import genresController from "../controllers/genreController";
 import cartController from "../controllers/cartController";
+import paymentController from "../controllers/paymentController";
+
 
 const multer = require("multer");
 const path = require('path');
@@ -174,7 +176,21 @@ const initWebRoutes = (app) => {
   );
   router.delete("/api/delete-item-in-cart", upload.none(), cartController.handleDeleteItemInCart);
   router.delete("/api/refresh-cart", upload.none(), cartController.handleRefreshCart);
+
+  // table payment
+  router.get("/api/get-all-payment", paymentController.handleGetAllPayment);
+  router.get("/api/get-all-payment-compact", paymentController.handleGetAllPaymentCompact);
+  router.get("/api/get-all-payment-of-user", paymentController.handleGetAllPaymentOfUser);
   
+  router.post(
+    "/api/create-new-order",
+    upload.none(),
+    paymentController.handleCreateNewOrder
+  );
+  router.put("/api/edit-order", upload.none(), paymentController.handleEditOrder);
+  router.delete("/api/delete-payment", upload.none(), paymentController.handleDeletePayment);
+
+
   app.use("/", router);
 };
 

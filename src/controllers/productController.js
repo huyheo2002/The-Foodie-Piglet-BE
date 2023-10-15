@@ -71,7 +71,7 @@ const handleEditProduct = async (req, res) => {
 }
 
 const handleDeleteProduct = async (req, res) => {
-    console.log("req.body", res.body)
+    console.log("req.body", req.body)
     if (!req.body.id) {
         return res.status(200).json({
             errCode: 1,

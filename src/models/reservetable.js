@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ReserveTable.belongsTo(models.Tables, { foreignKey: "idTable" });
+      ReserveTable.belongsTo(models["Tables"], { foreignKey: "idTable" });
     }
   }
   ReserveTable.init({

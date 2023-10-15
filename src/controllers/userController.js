@@ -52,7 +52,11 @@ const handleGetAllUsers = async (req, res) => {
     let newUsers = users ?? [];
     if(newUsers.length > 0) {
         newUsers = users.map((item) => {
-            item.avatar = `${process.env.URL_SERVER}/public/avatar/${item.avatar}`;            
+            if(item.avatar == null) {
+                item.avatar = item.avatar;
+            } else {
+                item.avatar = `${process.env.URL_SERVER}/public/avatar/${item.avatar}`;            
+            }
 
             return item
         })
