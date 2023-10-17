@@ -7,7 +7,12 @@ require("dotenv").config();
 const getAllPayment = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let payment = await db.Payment.findAll();
+            let payment = await db.Payment.findAll({
+                include: [{
+                    model: db.sequelize.models.User,
+                    attributes: ["name", "email", "username", "phone", "address"],
+                }]
+            });
 
             resolve(payment);
         } catch (error) {
@@ -21,7 +26,7 @@ const getAllPaymentCompact = () => {
         try {
             let payment = await db.Payment.findAll({
                 attributes: {
-                    // exclude: ["keyword", "desc", "createdAt", "updatedAt", "categoryId"]
+                    exclude: ["userId", "discountCode", "serviceFee", "deliveryAddress", "contactInfo", "paymentMethod", "purchasedItems", "note", "createdAt", "updatedAt"]
                 },
             });
 
@@ -63,9 +68,9 @@ const createNewOrder = (data) => {
                 serviceFee: data.serviceFee ?? null,
                 deliveryAddress: data.deliveryAddress,
                 contactInfo: data.contactInfo,
-                orderStatus: "Đang xử lý",
-                paymentMethod: "Thanh toán trực tiếp",
-                paymentStatus: "Chưa thanh toán",
+                orderStatus: data.orderStatus ?? "Đang xử lý",
+                paymentMethod: data.paymentMethod ?? "Thanh toán trực tiếp",
+                paymentStatus: data.paymentStatus ?? "Chưa thanh toán",
                 purchasedItems: data.purchasedItems,
                 note: data.note ?? null,
             });
