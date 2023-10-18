@@ -4,41 +4,25 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Genres', [{
-      name: 'Thời sự',
+      name: ' món mới',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
-      name: 'Kinh tế',
+      name: ' khuyến mãi',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
-      name: 'Chính trị',
+      name: 'Sự kiện ',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
-      name: 'Truyền thông',
+      name: 'Đánh giá ',
       createdAt: new Date(),
       updatedAt: new Date()
     }]);
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('Genres', [{
-      name: 'Thời sự',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }, {
-      name: 'Kinh tế',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }, {
-      name: 'Chính trị',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }, {
-      name: 'Truyền thông',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }]);
+    return queryInterface.bulkInsert('Genres', []);
   }
 };
