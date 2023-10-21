@@ -4,7 +4,7 @@ import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./routes/web";
 import connect from "./config/connectDB";
 // import jwtAction from "./middleware/JwtAction";
-import sendMail from "./sendMail";
+// import sendMail from "./sendMail";
 
 require("./passport");
 require("dotenv").config();
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 // test jwt
 // jwtAction.createJwt()
-// let decoded = jwtAction.verifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaHV5IiwiYWRkcmVzcyI6ImjDoCBu4buZaSIsImlhdCI6MTY5MzMwMzk1OH0.gVIZZ9KRVxdf-kLXNHmlJX7q-zneShsNzHjYKNEfKD8")
+// let decoded = jwtAction.verifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiVsSDbiBIdXkiLCJlbWFpbCI6Imh1eTEyQGFkbWluLmNvbSIsInVzZXJuYW1lIjoiaHV5YWRtaW4iLCJwaG9uZSI6MTIzNDU2Nzg5OSwiYWRkcmVzcyI6IkjDoCBO4buZaSIsImdlbmRlciI6MSwiYXZhdGFyIjpudWxsLCJyb2xlSWQiOjEsImNyZWF0ZWRBdCI6IjIwMjMtMTAtMThUMDg6Mjk6MjUuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjMtMTAtMThUMDg6Mjk6MjUuMDAwWiJ9LCJleHBpcmVzSW4iOiIxaCIsImlhdCI6MTY5NzYxOTQwMX0.at2tbSREa2_2d6tZ1Yj_fpkxSvt4d1DoewhI-m5Iitg")
 // console.log("decoded server:", decoded)
 
 // test send mail

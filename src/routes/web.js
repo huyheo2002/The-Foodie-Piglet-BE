@@ -10,7 +10,7 @@ import newController from "../controllers/newController";
 import genresController from "../controllers/genreController";
 import cartController from "../controllers/cartController";
 import paymentController from "../controllers/paymentController";
-
+import commonController from "../controllers/commonController";
 
 const multer = require("multer");
 const path = require('path');
@@ -190,7 +190,9 @@ const initWebRoutes = (app) => {
   router.put("/api/edit-order", upload.none(), paymentController.handleEditOrder);
   router.delete("/api/delete-payment", upload.none(), paymentController.handleDeletePayment);
 
-
+  // common 
+  router.get("/handle/decoded", commonController.decodeToken)
+  
   app.use("/", router);
 };
 
