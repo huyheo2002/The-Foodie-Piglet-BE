@@ -16,6 +16,11 @@ const handleUserLogin = (username, password) => {
         // compare password
         let user = await db.User.findOne({
           where: { username: username },
+          include: [{
+            model: db.sequelize.models.Role,
+            attributes: ["name"],
+          }],
+
           // get foreign key
           // chỉ lấy các trường trong attributes
           // attributes: ["email", "username", "roleId", "password"],
@@ -23,10 +28,24 @@ const handleUserLogin = (username, password) => {
           // attributes: {
           //   exclude: ["password"]
           // },
-          raw: true,
+          // raw: true,
         });
 
+        
         if (user) {
+          if(user.dataValues.Role.name) {
+            user.dataValues.roleName = user.dataValues.Role.name;
+            delete user.dataValues.Role;
+          }
+
+          let permissions = await db.RolePermission.findAll({
+            where: { roleId: user.roleId },
+            include: [{
+              model: db.sequelize.models.Permission,
+              attributes: ["name", "permissionGroupId"],
+            }],
+          });
+          
           // bcrypt.compareSync("B4c0/\/", hash);
           // compare password
           let check = await bcrypt.compareSync(password, user.password);
@@ -38,6 +57,7 @@ const handleUserLogin = (username, password) => {
             // jwt
             let payload = {
               user: user,
+              permissions: permissions,
               expiresIn: process.env.JWT_EXPIRES_IN,
             };
             let token = jwtAction.createJwt(payload);
@@ -56,7 +76,6 @@ const handleUserLogin = (username, password) => {
           "You'r email isn't exist in your system. Pls try other email";
       }
 
-      console.log("dataUser: ", dataUser);
       resolve(dataUser);
     } catch (error) {
       reject(error);
@@ -236,7 +255,7 @@ const editUser = (data, newAvatar) => {
         let nameImage = null;
         if (newAvatar) {
           // xoá ảnh cũ
-          if(user.avatar) {
+          if (user.avatar) {
             let filePathOld = `src/public/images/avatar/${user.avatar}`;
             fs.unlink(filePathOld, (err) => {
               if (err) {
@@ -259,7 +278,7 @@ const editUser = (data, newAvatar) => {
               console.log("File saved successfully:", filePathNew);
             }
           });
-        }        
+        }
 
         await user.update({
           name: data.name,
@@ -271,7 +290,7 @@ const editUser = (data, newAvatar) => {
           gender: data.gender,
           roleId: data.roleId,
           avatar: nameImage ?? oldImage,
-        });        
+        });
 
         resolve({
           errCode: 0,
@@ -303,7 +322,7 @@ const deleteUser = (userId) => {
         });
       }
 
-      if(user.avatar) {
+      if (user.avatar) {
         let filePathOld = `src/public/images/avatar/${user.avatar}`;
         fs.unlink(filePathOld, (err) => {
           if (err) {
@@ -338,7 +357,7 @@ const userLoginGoogleSuccess = (email) => {
       if (!user) {
         dataUser.errCode = 1;
         dataUser.message = "Login fail";
-        
+
         resolve(dataUser);
       }
 
@@ -351,7 +370,7 @@ const userLoginGoogleSuccess = (email) => {
       dataUser.accessToken = token;
       dataUser.errCode = 0;
       dataUser.message = "Login success";
-      
+
       console.log("dataUser google: ", dataUser);
       resolve(dataUser);
     } catch (error) {

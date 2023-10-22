@@ -15,6 +15,7 @@ const decodeToken = async (req, res) => {
         return res.status(200).json({
             errCode: 0,
             errMsg: "Decoded success",
+            decoded: decoded
         })
     } else {
         return res.status(200).json({

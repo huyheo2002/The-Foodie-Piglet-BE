@@ -11,6 +11,7 @@ import genresController from "../controllers/genreController";
 import cartController from "../controllers/cartController";
 import paymentController from "../controllers/paymentController";
 import commonController from "../controllers/commonController";
+import permissionController from "../controllers/permissionController";
 
 const multer = require("multer");
 const path = require('path');
@@ -192,7 +193,11 @@ const initWebRoutes = (app) => {
 
   // common 
   router.get("/handle/decoded", commonController.decodeToken)
-  
+
+  // permission
+  router.get("/api/get-all-permission-group", permissionController.handleGetAllPermissionGroup);
+  router.get("/api/get-all-permission", permissionController.handleGetAllPermission);
+
   app.use("/", router);
 };
 
