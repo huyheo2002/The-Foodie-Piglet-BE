@@ -47,12 +47,16 @@ const getAllNews = (newId) => {
       let news = "";
       if (newId === "all") {
         news = await db.New.findAll({
-          attributes: {
-            exclude: [
-              "createdAt",
-              "updatedAt",
-            ],
-          },
+          // attributes: {
+          //   exclude: [
+          //     "createdAt",
+          //     "updatedAt",
+          //   ],
+          // },
+          include: [{
+            model: db.sequelize.models.Genre,
+            attributes: ["name"],
+          }],
         });
       } else if (newId && newId !== "all") {
         news = db.New.findOne({
@@ -65,6 +69,10 @@ const getAllNews = (newId) => {
               "createdAt",
               "updatedAt",
             ],
+            include: [{
+              model: db.sequelize.models.Genre,
+              attributes: ["name"],
+            }],
           },
         });
       }

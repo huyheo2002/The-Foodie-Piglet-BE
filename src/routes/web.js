@@ -133,10 +133,18 @@ const initWebRoutes = (app) => {
 
   // table roles
   router.get("/api/get-all-roles", roleController.handleGetAllRoles);
-
+  router.get("/api/get-all-roles-with-permission", roleController.handleGetAllRolesWithPermission);
+  router.post("/api/create-new-role", upload.none(), roleController.handleCreateNewRole);
+  router.put("/api/update-role", upload.none(), roleController.handleUpdateRole);
+  router.delete("/api/delete-role", upload.none(), roleController.handleDeleteRole);
+  
   // table for Table :v
   router.get("/api/get-all-tables", tableController.handleGetAllTables);
+  router.get("/api/get-all-reserve-tables", tableController.handleGetAllReserveTable);
+  
   router.post("/api/create-reserve-tables", upload.none(), tableController.handleCreateReserveTable);
+  router.put("/api/update-reserve-tables", upload.none(), tableController.handleUpdateReserveTable);
+  router.delete("/api/delete-reserve-tables", upload.none(), tableController.handleDeleteReserveTable);
 
   // table category product
   router.get("/api/get-all-category", categoryController.handleGetAllCategory);
@@ -197,6 +205,22 @@ const initWebRoutes = (app) => {
   // permission
   router.get("/api/get-all-permission-group", permissionController.handleGetAllPermissionGroup);
   router.get("/api/get-all-permission", permissionController.handleGetAllPermission);
+  
+  router.post(
+    "/api/create-permission-group",
+    upload.none(),
+    permissionController.handleCreatePermissionGroup
+  );
+  router.put("/api/update-permission-group", upload.none(), permissionController.handleUpdatePermissionGroup);
+  router.delete("/api/delete-permission-group", upload.none(), permissionController.handleDeletePermissionGroup);
+  
+  router.post(
+    "/api/create-permission",
+    upload.none(),
+    permissionController.handleCreatePermission
+  );
+  router.put("/api/update-permission", upload.none(), permissionController.handleUpdatePermission);
+  router.delete("/api/delete-permission", upload.none(), permissionController.handleDeletePermission);
 
   app.use("/", router);
 };

@@ -117,7 +117,12 @@ const getAllUsersCompact = (userId) => {
               "avatar",
             ],
           },
+          include: [{
+            model: db.sequelize.models.Role,
+            attributes: ["name"],
+          }],
         });
+        
       } else if (userId && userId !== "all") {
         users = db.User.findOne({
           where: { id: userId },
@@ -130,8 +135,12 @@ const getAllUsersCompact = (userId) => {
               "gender",
               "phone",
               "avatar",
-            ],
+            ],                        
           },
+          include: [{
+            model: db.sequelize.models.Role,
+            attributes: ["name"],
+          }],
         });
       } else {
       }
@@ -151,15 +160,18 @@ const getAllUsers = (userId) => {
           attributes: {
             exclude: ["password"],
           },
+          include: [{
+            model: db.sequelize.models.Role,
+            attributes: ["name"],
+          }],
         });
       } else if (userId && userId !== "all") {
         users = db.User.findOne({
           where: { id: userId },
           attributes: {
             exclude: ["password"],
-          },
+          },          
         });
-      } else {
       }
       resolve(users);
     } catch (error) {
