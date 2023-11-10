@@ -106,7 +106,7 @@ const handleCreateReserveTable = async (req, res) => {
             // console.log("<i>${randomGreeting}</i>", `<i>${randomGreeting}</i>`)
 
             // khi muốn gửi mail refresh token + mở comment :v
-            // sendMail(email, title, randomGreeting, `<i>${randomGreeting}</i>`);
+            sendMail(email, title, randomGreeting, `<i>${randomGreeting}</i>`);
         }
 
         return res.status(200).json({

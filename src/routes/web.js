@@ -12,6 +12,7 @@ import cartController from "../controllers/cartController";
 import paymentController from "../controllers/paymentController";
 import commonController from "../controllers/commonController";
 import permissionController from "../controllers/permissionController";
+import authController from "../controllers/authController";
 
 const multer = require("multer");
 const path = require('path');
@@ -74,8 +75,11 @@ const initWebRoutes = (app) => {
     }
   );
 
-  router.get("/login-success/:email", userController.handleLoginSuccess);
-
+  // auth 
+  router.get("/login-success/:email", authController.handleLoginSuccess);  
+  router.post("/api/login", upload.none(), authController.handleLogin);
+  router.put("/api/change-password", upload.none(), authController.handleChangePassword);
+  
   // get path image
   router.get("/public/base/:filename", (req, res) => {
     const imagePath = path.join(__dirname, `../public/images/base/${req.params.filename}`);
@@ -101,8 +105,8 @@ const initWebRoutes = (app) => {
   });
 
   // api sd ben react
-  // table user
-  router.post("/api/login", userController.handleLogin);
+  // table user  
+
   router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.get(
     "/api/get-all-users-compact",

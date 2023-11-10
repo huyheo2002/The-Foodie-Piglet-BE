@@ -17,6 +17,7 @@ const sendMail = async (mailReceive, titleReceive, textReceive, htmlReceive) => 
             service: "gmail",
             auth: {
                 type: "OAuth2",
+                // chọn oauth2 theo tài khoản dưới
                 user: "thefoodiepiglet@gmail.com",
                 clientId: GOOGLE_CLIENT_ID,
                 clientSecret: GOOGLE_CLIENT_SECRET,

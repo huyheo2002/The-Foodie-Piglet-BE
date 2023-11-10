@@ -1,87 +1,9 @@
 import db from "../models";
 import bcrypt from "bcryptjs";
-import jwtAction from "../middleware/JwtAction";
 const fs = require("fs");
 require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
 import generateUniqueId from "../utils/uniqueName";
-
-const handleUserLogin = (username, password) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let dataUser = {};
-      let isExits = await checkUsername(username);
-      if (isExits) {
-        // user already exist
-        // compare password
-        let user = await db.User.findOne({
-          where: { username: username },
-          include: [{
-            model: db.sequelize.models.Role,
-            attributes: ["name"],
-          }],
-
-          // get foreign key
-          // chỉ lấy các trường trong attributes
-          // attributes: ["email", "username", "roleId", "password"],
-
-          // attributes: {
-          //   exclude: ["password"]
-          // },
-          // raw: true,
-        });
-
-        
-        if (user) {
-          if(user.dataValues.Role.name) {
-            user.dataValues.roleName = user.dataValues.Role.name;
-            delete user.dataValues.Role;
-          }
-
-          let permissions = await db.RolePermission.findAll({
-            where: { roleId: user.roleId },
-            include: [{
-              model: db.sequelize.models.Permission,
-              attributes: ["name", "permissionGroupId"],
-            }],
-          });
-          
-          // bcrypt.compareSync("B4c0/\/", hash);
-          // compare password
-          let check = await bcrypt.compareSync(password, user.password);
-          if (check) {
-            dataUser.errCode = 0;
-            dataUser.errMsg = "oke";
-            delete user.password;
-
-            // jwt
-            let payload = {
-              user: user,
-              permissions: permissions,
-              expiresIn: process.env.JWT_EXPIRES_IN,
-            };
-            let token = jwtAction.createJwt(payload);
-            dataUser.accessToken = token;
-          } else {
-            dataUser.errCode = 3;
-            dataUser.errMsg = "Wrong password";
-          }
-        } else {
-          dataUser.errCode = 2;
-          dataUser.errMsg = "User's not found";
-        }
-      } else {
-        dataUser.errCode = 1;
-        dataUser.errMsg =
-          "You'r email isn't exist in your system. Pls try other email";
-      }
-
-      resolve(dataUser);
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
 
 const checkUsername = (username) => {
   return new Promise(async (resolve, reject) => {
@@ -358,45 +280,10 @@ const deleteUser = (userId) => {
   });
 };
 
-// error
-const userLoginGoogleSuccess = (email) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let dataUser = {};
-      let user = await db.User.findOne({
-        where: { email: email },
-      });
-      if (!user) {
-        dataUser.errCode = 1;
-        dataUser.message = "Login fail";
-
-        resolve(dataUser);
-      }
-
-      // jwt
-      let payload = {
-        user: user,
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      };
-      let token = jwtAction.createJwt(payload);
-      dataUser.accessToken = token;
-      dataUser.errCode = 0;
-      dataUser.message = "Login success";
-
-      console.log("dataUser google: ", dataUser);
-      resolve(dataUser);
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 module.exports = {
-  handleUserLogin: handleUserLogin,
   getAllUsers: getAllUsers,
   createNewUser: createNewUser,
   getAllUsersCompact: getAllUsersCompact,
   editUser: editUser,
   deleteUser: deleteUser,
-  userLoginGoogleSuccess: userLoginGoogleSuccess,
 };
