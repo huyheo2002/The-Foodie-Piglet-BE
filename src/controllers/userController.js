@@ -107,7 +107,7 @@ const handleDeleteUser = async (req, res) => {
             errMsg: "Missing required parameter"
         })
     }
-    let message = await userServices.deleteUser(req.body.id);
+    let message = await userServices.deleteUser(req.body.id, req.body.originatorId);
 
     return res.status(200).json(message)
 }

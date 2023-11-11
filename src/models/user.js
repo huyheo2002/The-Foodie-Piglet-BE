@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsTo(models["Role"], { foreignKey: "roleId" });
       User.hasMany(models["Notification"], { foreignKey: "userId" } ); 
       User.hasMany(models["Payment"], { foreignKey: "userId" } );
+      User.hasMany(models["RoomParticipant"], { foreignKey: "userId" } );
+      User.hasMany(models["Message"], { foreignKey: "userId" } );
     }
   }
   User.init({  

@@ -44,7 +44,7 @@ const getAllUsersCompact = (userId) => {
             attributes: ["name"],
           }],
         });
-        
+
       } else if (userId && userId !== "all") {
         users = db.User.findOne({
           where: { id: userId },
@@ -57,7 +57,7 @@ const getAllUsersCompact = (userId) => {
               "gender",
               "phone",
               "avatar",
-            ],                        
+            ],
           },
           include: [{
             model: db.sequelize.models.Role,
@@ -92,7 +92,7 @@ const getAllUsers = (userId) => {
           where: { id: userId },
           attributes: {
             exclude: ["password"],
-          },          
+          },
         });
       }
       resolve(users);
@@ -157,6 +157,26 @@ const createNewUser = (data, avatar) => {
         roleId: data.roleId,
         avatar: nameImage
       });
+
+      // notify
+      if (data.originatorId) {
+        let userNotify = await db.User.findByPk(data.originatorId);
+
+        if (userNotify) {
+          let getRole = await db.Role.findOne({
+            where: {
+              id: userNotify.roleId,
+            }
+          })
+
+          await db.Notification.create({
+            title: "Tạo tài khoản mới",
+            message: `${userNotify.name || userNotify.username} (${getRole ? getRole.name : ""}) đã tạo tài khoản mới với username: ${data.username}.`,
+            userId: data?.originatorId,
+          })
+        }
+      }
+
       resolve({
         errCode: 0,
         message: "Ok",
@@ -226,6 +246,25 @@ const editUser = (data, newAvatar) => {
           avatar: nameImage ?? oldImage,
         });
 
+        // notify
+        if (data.originatorId) {
+          let userNotify = await db.User.findByPk(data.originatorId);
+
+          if (userNotify) {
+            let getRole = await db.Role.findOne({
+              where: {
+                id: userNotify.roleId,
+              }
+            })
+
+            await db.Notification.create({
+              title: "Cập nhật thông tin tải khoản",
+              message: `${userNotify.name || userNotify.username} (${getRole ? getRole.name : ""}) đã thay đổi thông tin tài khoản username: ${data.username}.`,
+              userId: data?.originatorId,
+            })
+          }
+        }
+
         resolve({
           errCode: 0,
           message: "Ok",
@@ -243,12 +282,32 @@ const editUser = (data, newAvatar) => {
   });
 };
 
-const deleteUser = (userId) => {
+const deleteUser = (userId, originatorId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let user = await db.User.findOne({
         where: { id: userId },
       });
+
+      // notify
+      if(originatorId) {
+        let userNotify = await db.User.findByPk(originatorId);
+  
+        if(userNotify) {
+          let getRole = await db.Role.findOne({
+            where: {
+              id: userNotify.roleId,
+            }
+          })
+  
+          await db.Notification.create({
+            title: "Xóa tài Khoản",
+            message: `${userNotify.name || userNotify.username} (${getRole ? getRole.name : ""}) đã xóa tài khoản username: ${user.username}.`,
+            userId: originatorId,
+          })        
+        }
+      }
+
       if (!user) {
         resolve({
           errCode: 2,
@@ -268,7 +327,7 @@ const deleteUser = (userId) => {
 
       await db.User.destroy({
         where: { id: userId },
-      });
+      });      
 
       resolve({
         errCode: 0,
