@@ -13,6 +13,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      roomCreatorId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: "Users",
+          },
+          key: "id",
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

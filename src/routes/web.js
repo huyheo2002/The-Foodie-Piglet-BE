@@ -14,6 +14,7 @@ import commonController from "../controllers/commonController";
 import permissionController from "../controllers/permissionController";
 import authController from "../controllers/authController";
 import notificationController from "../controllers/notificationServices";
+import chatController from "../controllers/chatController";
 
 const multer = require("multer");
 const path = require('path');
@@ -230,6 +231,38 @@ const initWebRoutes = (app) => {
   // notify
   router.get("/api/get-all-notification", notificationController.handleGetAllNotification);
 
+  // chat api
+  router.get("/api/get-all-chatroom", chatController.handleGetAllChatRoom);
+  router.get("/api/get-all-chatroom-with-id", chatController.handleGetAllChatRoomWithId);
+  router.get("/api/find-chatroom", chatController.handleFindChatRoom);
+  router.get("/api/get-all-member-in-room", chatController.handleGetAllMemberInRoom);
+  router.get("/api/get-all-room-participant", chatController.handleGetAllRoomParticipant);
+  router.get("/api/get-all-message", chatController.handleGetAllMessage);
+
+  router.post(
+    "/api/create-chatroom",
+    upload.none(),
+    chatController.handleCreateChatRoom
+  );
+  router.post(
+    "/api/add-member",
+    upload.none(),
+    chatController.handleAddMember
+  );
+  router.post(
+    "/api/create-message",
+    upload.none(),
+    chatController.handleCreateMessage
+  );
+  
+  router.put("/api/change-name-group", upload.none(), chatController.handleChangeNameGroup);
+  router.put("/api/promote-to-leader", upload.none(), chatController.handlePromoteToLeader);  
+  router.put("/api/recall-message", upload.none(), chatController.handleRecallMessage);  
+
+  router.delete("/api/remove-member", upload.none(), chatController.handleRemoveMemberInRoom);
+  router.delete("/api/leave-room", upload.none(), chatController.handleLeaveChatRoom);
+  router.delete("/api/delete-message", upload.none(), chatController.handleDeleteMessage);
+  
   app.use("/", router);
 };
 

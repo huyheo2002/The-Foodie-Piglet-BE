@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      ChatRoom.belongsTo(models["User"], { foreignKey: "roomCreatorId" });
       ChatRoom.hasMany(models["RoomParticipant"], { foreignKey: "roomId" } );
       ChatRoom.hasMany(models["Message"], { foreignKey: "roomId" } );
     }
@@ -24,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    roomCreatorId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },    
     createdAt: {

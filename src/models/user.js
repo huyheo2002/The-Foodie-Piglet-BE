@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models["Payment"], { foreignKey: "userId" } );
       User.hasMany(models["RoomParticipant"], { foreignKey: "userId" } );
       User.hasMany(models["Message"], { foreignKey: "userId" } );
+      User.hasMany(models["ChatRoom"], { foreignKey: "roomCreatorId" } );
     }
   }
   User.init({  
