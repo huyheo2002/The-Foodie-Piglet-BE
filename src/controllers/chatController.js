@@ -9,8 +9,8 @@ const handleCreateChatRoom = async (req, res) => {
 }
 
 const handleGetAllChatRoom = async (req, res) => {
-    let room = await chatServices.getAllChatRoom();    
-    
+    let room = await chatServices.getAllChatRoom();
+
     return res.status(200).json({
         errCode: 0,
         errMsg: "Ok",
@@ -19,8 +19,8 @@ const handleGetAllChatRoom = async (req, res) => {
 }
 
 const handleGetAllRoomParticipant = async (req, res) => {
-    let room = await chatServices.getAllRoomParticipant();    
-    
+    let room = await chatServices.getAllRoomParticipant();
+
     return res.status(200).json({
         errCode: 0,
         errMsg: "Ok",
@@ -30,8 +30,8 @@ const handleGetAllRoomParticipant = async (req, res) => {
 
 const handleGetAllChatRoomWithId = async (req, res) => {
     let id = req.query.id;
-    let room = await chatServices.getAllChatRoomWithId(id);    
-    
+    let room = await chatServices.getAllChatRoomWithId(id);
+
     return res.status(200).json({
         errCode: 0,
         errMsg: "Ok",
@@ -73,8 +73,8 @@ const handleLeaveChatRoom = async (req, res) => {
 
 const handleGetAllMemberInRoom = async (req, res) => {
     let roomId = req.query.roomId;
-    let room = await chatServices.getAllMemberInRoom(roomId);    
-    
+    let room = await chatServices.getAllMemberInRoom(roomId);
+
     return res.status(200).json({
         errCode: 0,
         errMsg: "Ok",
@@ -96,9 +96,9 @@ const handlePromoteToLeader = async (req, res) => {
     return res.status(200).json(message)
 }
 
-const handleGetAllMessage= async (req, res) => {
-    let messages = await chatServices.getAllMessage();    
-    
+const handleGetAllMessage = async (req, res) => {
+    let messages = await chatServices.getAllMessage();
+
     return res.status(200).json({
         errCode: 0,
         errMsg: "Ok",
@@ -127,6 +127,29 @@ const handleDeleteMessage = async (req, res) => {
     return res.status(200).json(message)
 }
 
+// Test socket
+const handleCreateMessageSocket = async (data) => {
+    try {
+        let message = await chatServices.createMessage(data);
+        
+        console.log("message controller", message);
+        if (message.errCode === 0) {
+            return message;
+        }
+
+        return {
+            errCode: 1,
+            message: "Failed to create message",
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            errCode: 1,
+            message: "Failed to create message",
+        };
+    }
+}
+
 
 
 module.exports = {
@@ -144,5 +167,7 @@ module.exports = {
     handleGetAllMessage: handleGetAllMessage,
     handleCreateMessage: handleCreateMessage,
     handleRecallMessage: handleRecallMessage,
-    handleDeleteMessage: handleDeleteMessage
+    handleDeleteMessage: handleDeleteMessage,
+    // test socket
+    handleCreateMessageSocket: handleCreateMessageSocket
 }
