@@ -32,6 +32,39 @@ const initSocket = (server) => {
             }
         });
 
+        // thu hồi tin nhắn
+        socket.on("recallMessage", async (id) => {
+            console.log("recall message success", id);
+            try {
+                // Xử lý tin nhắn và lưu vào cơ sở dữ liệu
+                let message = await chatController.handleRecallMessageSocket(id);
+                console.log("message recall socket", message);
+                if(message) {
+                    // Gửi tin nhắn mới đến tất cả client khác
+                    io.emit("recallMessage", message);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+        // // xóa tin nhắn 
+        socket.on("deleteMessage", async (id) => {
+            console.log("delete message success", id);
+            try {
+                // Xử lý tin nhắn và lưu vào cơ sở dữ liệu
+                let message = await chatController.handleDeleteMessageSocket(id);
+                console.log("message socket", message);
+                if(message) {
+                    // Gửi tin nhắn mới đến tất cả client khác
+                    io.emit("deleteMessage", message);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+        
+
         socket.on("disconnect", () => {
             handleDisconnect(socket);
         });

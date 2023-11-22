@@ -150,7 +150,31 @@ const handleCreateMessageSocket = async (data) => {
     }
 }
 
+const handleRecallMessageSocket = async (id) => {
+    try {
+        let message = await chatServices.recallMessage(id);
+        
+        if (message) {
+            return message;
+        }        
+    } catch (error) {
+        console.error(error);
+        return message;
+    }
+}
 
+const handleDeleteMessageSocket = async (id) => {
+    try {
+        let message = await chatServices.deleteMessage(id);
+        
+        if (message) {
+            return message;
+        }        
+    } catch (error) {
+        console.error(error);
+        return message;
+    }
+}
 
 module.exports = {
     handleCreateChatRoom: handleCreateChatRoom,
@@ -169,5 +193,7 @@ module.exports = {
     handleRecallMessage: handleRecallMessage,
     handleDeleteMessage: handleDeleteMessage,
     // test socket
-    handleCreateMessageSocket: handleCreateMessageSocket
+    handleCreateMessageSocket: handleCreateMessageSocket,
+    handleRecallMessageSocket: handleRecallMessageSocket,
+    handleDeleteMessageSocket: handleDeleteMessageSocket
 }
