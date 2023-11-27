@@ -5,6 +5,7 @@ const fs = require("fs");
 require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
 import generateUniqueId from "../utils/uniqueName";
+import sendMail from "../sendMail";
 
 const hashPassword = (password) => {
     return new Promise(async (resolve, reject) => {
@@ -204,9 +205,9 @@ const changePassword = (data) => {
             const idPrim = data.id;
             let user = await db.User.findByPk(idPrim);
 
-            if (user) {                
-                let isPasswordValid = comparePassword(data.oldPassword ,user.password)
-                if(isPasswordValid) {
+            if (user) {
+                let isPasswordValid = comparePassword(data.oldPassword, user.password)
+                if (isPasswordValid) {
                     if (data.newPassword !== data.confirmPassword) {
                         resolve({
                             errCode: 3,
@@ -217,7 +218,7 @@ const changePassword = (data) => {
                         await user.update({
                             password: hashPasswordFromBcrypt || data.password,
                         });
-    
+
                         resolve({
                             errCode: 0,
                             message: "Ok",
@@ -243,9 +244,109 @@ const changePassword = (data) => {
     });
 };
 
+const forgotPassword = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        console.log("data services", data)
+        try {
+            if (!data) {
+                resolve({
+                    errCode: 2,
+                    message: "Missing required parameter",
+                });
+            }
+
+            let checkEmail = await db.User.findOne({
+                where: {
+                    email: data.email,
+                    username: data.username
+                },
+            });
+
+            console.log("checkEmail", checkEmail);
+
+            if (checkEmail) {
+                let payload = {
+                    infoUser: checkEmail,
+                    expiresIn: process.env.JWT_EXPIRES_IN,
+                };
+                let token = jwtAction.createJwt(payload);
+
+                let emailReceive = data.email;
+                let title = `Quên mật khẩu`;
+                const html = `Xin vui lòng click vào đây để thay đổi mật khẩu: <a href="${process.env.URL_CLIENT}/reset-password/${token}">Click here</a>`;
+                // khi muốn gửi mail refresh token + mở comment :v
+                await sendMail(emailReceive, title, "", html);
+
+                console.log("emailReceive", emailReceive);
+                resolve({
+                    errCode: 0,
+                    message: "Allow reset password",
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: "Email doesn't exist",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+};
+
+const resetPassword = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        console.log("data reset Password", data);
+        try {
+            if (!data) {
+                resolve({
+                    errCode: 2,
+                    message: "Missing required parameter",
+                });
+            }                    
+
+            let checkEmail = await db.User.findOne({
+                where: { 
+                    email: data.email,
+                    username: data.username
+                },
+            });            
+
+            if (checkEmail) {
+                let newPassword = generateUniqueId();
+                console.log("newPassword", newPassword);
+                let hashPasswordFromBcrypt = await hashPassword(newPassword);
+                await checkEmail.update({
+                    password: hashPasswordFromBcrypt
+                })
+
+                let emailReceive = data.email;
+                let title = `Reset mật khẩu`;
+                const html = `Mật khẩu mới của bạn là: ${newPassword} vui lòng vào lại trang chủ để kiểm tra lại! <a href="${process.env.URL_CLIENT}/login">Click here</a>`;
+                // khi muốn gửi mail refresh token + mở comment :v
+                await sendMail(emailReceive, title, "", html);
+
+                resolve({
+                    errCode: 0,
+                    message: "Reset password success",
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: "Email doesn't exist",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+};
+
 module.exports = {
     userLogin: userLogin,
     userLoginGoogleSuccess: userLoginGoogleSuccess,
     userRegister: userRegister,
-    changePassword: changePassword
+    changePassword: changePassword,
+    forgotPassword: forgotPassword,
+    resetPassword: resetPassword
 };

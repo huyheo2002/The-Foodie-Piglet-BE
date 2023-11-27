@@ -43,5 +43,5 @@ let port = process.env.PORT || 3000;
 // })
 
 server.listen(port, () => {
-    console.log("backend nodejs is running on the port: ", port)    
+    console.log("backend nodejs server listen is running on the port: ", port)    
 });

@@ -56,9 +56,25 @@ const handleChangePassword = async (req, res) => {
     return res.status(200).json(message)
 }
 
+const handleForgotPassword = async (req, res) => {
+    let data = req.body;
+    let message = await authServices.forgotPassword(data);
+
+    return res.status(200).json(message)
+}
+
+const handleResetPassword = async (req, res) => {
+    let data = req.body;
+    let message = await authServices.resetPassword(data);
+
+    return res.status(200).json(message)
+}
+
 module.exports = {
     handleLogin: handleLogin,
     handleLoginSuccess: handleLoginSuccess,
     handleRegister: handleRegister,
-    handleChangePassword: handleChangePassword
+    handleChangePassword: handleChangePassword,
+    handleForgotPassword: handleForgotPassword,
+    handleResetPassword: handleResetPassword
 }

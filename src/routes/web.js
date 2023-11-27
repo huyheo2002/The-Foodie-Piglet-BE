@@ -81,6 +81,8 @@ const initWebRoutes = (app) => {
   router.get("/login-success/:email", authController.handleLoginSuccess);
   router.post("/api/login", upload.none(), authController.handleLogin);
   router.put("/api/change-password", upload.none(), authController.handleChangePassword);
+  router.post("/api-reset-password", upload.none(), authController.handleResetPassword);
+  router.post("/api-forgot-password", upload.none(), authController.handleForgotPassword);
 
   // get path image
   router.get("/public/base/:filename", (req, res) => {
