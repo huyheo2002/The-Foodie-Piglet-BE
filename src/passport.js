@@ -20,8 +20,8 @@ const hashPassword = (password) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: '655441816898-pmggln04b9pnec84fup5njmes7hu2qe0.apps.googleusercontent.com',
-      clientSecret: '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',
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:8080/api/auth/google/callback",
     },
     async function (accessToken, refreshToken, profile, cb) {
