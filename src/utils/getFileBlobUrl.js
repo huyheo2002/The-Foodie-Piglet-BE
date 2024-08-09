@@ -9,10 +9,7 @@ function getFileBlobUrl(filePath) {
         return;
       }
 
-      // Create a Blob from the file data
       const blob = new Blob([data]);
-
-      // Create a Blob URL for the Blob object
       const blobUrl = URL.createObjectURL(blob);
 
       resolve(blobUrl);

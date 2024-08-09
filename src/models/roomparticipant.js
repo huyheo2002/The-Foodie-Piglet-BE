@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class RoomParticipant extends Model {
     /**
@@ -15,32 +13,35 @@ module.exports = (sequelize, DataTypes) => {
       RoomParticipant.belongsTo(models["ChatRoom"], { foreignKey: "roomId" });
     }
   }
-  RoomParticipant.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
+  RoomParticipant.init(
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      roomId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    roomId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    {
+      sequelize,
+      modelName: "RoomParticipant",
     }
-  }, {
-    sequelize,
-    modelName: 'RoomParticipant',
-  });
+  );
   return RoomParticipant;
 };

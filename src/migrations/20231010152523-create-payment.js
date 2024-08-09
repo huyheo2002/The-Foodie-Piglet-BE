@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Payments', {
+    await queryInterface.createTable("Payments", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -17,7 +17,7 @@ module.exports = {
             tableName: "Users",
           },
           key: "id",
-        }
+        },
       },
       paymentDate: {
         allowNull: true,
@@ -26,7 +26,7 @@ module.exports = {
       totalPrice: {
         allowNull: false,
         type: Sequelize.FLOAT,
-      }, 
+      },
       discountCode: {
         allowNull: true,
         type: Sequelize.STRING,
@@ -34,7 +34,7 @@ module.exports = {
       serviceFee: {
         allowNull: true,
         type: Sequelize.FLOAT,
-      },  
+      },
       deliveryAddress: {
         allowNull: false,
         type: Sequelize.STRING,
@@ -42,7 +42,7 @@ module.exports = {
       contactInfo: {
         allowNull: false,
         type: Sequelize.STRING,
-      },  
+      },
       paymentMethod: {
         allowNull: false,
         type: Sequelize.STRING,
@@ -65,15 +65,15 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Payments');
-  }
+    await queryInterface.dropTable("Payments");
+  },
 };

@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Notification extends Model {
     /**
@@ -14,36 +12,39 @@ module.exports = (sequelize, DataTypes) => {
       Notification.belongsTo(models["User"], { foreignKey: "userId" });
     }
   }
-  Notification.init({
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      allowNull: false,
-      primaryKey: true,
+  Notification.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      message: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    message: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,   
-      allowNull: false,   
-    },
-    updatedAt: {
-      type: DataTypes.DATE,    
-      allowNull: false,   
-    },  
-  }, {
-    sequelize,
-    modelName: 'Notification',
-  });
+    {
+      sequelize,
+      modelName: "Notification",
+    }
+  );
   return Notification;
 };

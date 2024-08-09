@@ -39,12 +39,13 @@ const getAllUsersCompact = (userId) => {
               "avatar",
             ],
           },
-          include: [{
-            model: db.sequelize.models.Role,
-            attributes: ["name"],
-          }],
+          include: [
+            {
+              model: db.sequelize.models.Role,
+              attributes: ["name"],
+            },
+          ],
         });
-
       } else if (userId && userId !== "all") {
         users = db.User.findOne({
           where: { id: userId },
@@ -59,10 +60,12 @@ const getAllUsersCompact = (userId) => {
               "avatar",
             ],
           },
-          include: [{
-            model: db.sequelize.models.Role,
-            attributes: ["name"],
-          }],
+          include: [
+            {
+              model: db.sequelize.models.Role,
+              attributes: ["name"],
+            },
+          ],
         });
       } else {
       }
@@ -82,10 +85,12 @@ const getAllUsers = (userId) => {
           attributes: {
             exclude: ["password"],
           },
-          include: [{
-            model: db.sequelize.models.Role,
-            attributes: ["name"],
-          }],
+          include: [
+            {
+              model: db.sequelize.models.Role,
+              attributes: ["name"],
+            },
+          ],
         });
       } else if (userId && userId !== "all") {
         users = db.User.findOne({
@@ -116,9 +121,7 @@ const hashPassword = (password) => {
 const createNewUser = (data, avatar) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // check username is exits
       let isExits = await checkUsername(data.username);
-      // console.log("isExits", isExits)
       if (isExits === true) {
         resolve({
           errCode: 1,
@@ -130,9 +133,7 @@ const createNewUser = (data, avatar) => {
       let nameImage = null;
       if (avatar) {
         let binaryData = avatar.buffer;
-        nameImage =
-          generateUniqueId() + avatar.originalname || "data.bin";
-        // avatarPath += nameImage;
+        nameImage = generateUniqueId() + avatar.originalname || "data.bin";
         let filePath = `src/public/images/avatar/${nameImage}`;
         fs.writeFile(filePath, binaryData, "binary", (err) => {
           if (err) {
@@ -142,8 +143,6 @@ const createNewUser = (data, avatar) => {
           }
         });
       }
-
-      // console.log("nameImage", nameImage)
 
       let hashPasswordFromBcrypt = await hashPassword(data.password);
       await db.User.create({
@@ -155,7 +154,7 @@ const createNewUser = (data, avatar) => {
         address: data.address,
         gender: data.gender === "1" ? true : false,
         roleId: data.roleId,
-        avatar: nameImage
+        avatar: nameImage,
       });
 
       // notify
@@ -166,14 +165,16 @@ const createNewUser = (data, avatar) => {
           let getRole = await db.Role.findOne({
             where: {
               id: userNotify.roleId,
-            }
-          })
+            },
+          });
 
           await db.Notification.create({
             title: "Tạo tài khoản mới",
-            message: `${userNotify.name || userNotify.username} (${getRole ? getRole.name : ""}) đã tạo tài khoản mới với username: ${data.username}.`,
+            message: `${userNotify.name || userNotify.username} (${
+              getRole ? getRole.name : ""
+            }) đã tạo tài khoản mới với username: ${data.username}.`,
             userId: data?.originatorId,
-          })
+          });
         }
       }
 
@@ -190,7 +191,6 @@ const createNewUser = (data, avatar) => {
 const editUser = (data, newAvatar) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("data user edit", data);
       if (!data.id) {
         resolve({
           errCode: 2,
@@ -199,31 +199,23 @@ const editUser = (data, newAvatar) => {
       }
 
       const idPrim = data.id;
-      console.log("idPrim", idPrim)
       let user = await db.User.findByPk(idPrim);
 
-      console.log("user Edit:", user)
       if (user) {
-        console.log("user tồn tại")
         let oldImage = user.avatar;
         let nameImage = null;
         if (newAvatar) {
-          // xoá ảnh cũ
           if (user.avatar) {
             let filePathOld = `src/public/images/avatar/${user.avatar}`;
             fs.unlink(filePathOld, (err) => {
               if (err) {
                 console.error(err);
-                // return res.status(500).send('Error deleting the file');
               }
             });
           }
 
-          // tạo mới link ảnh
           let binaryData = newAvatar.buffer;
-          nameImage =
-            generateUniqueId() + newAvatar.originalname || "data.bin";
-          // avatarPath += nameImage;
+          nameImage = generateUniqueId() + newAvatar.originalname || "data.bin";
           let filePathNew = `src/public/images/avatar/${nameImage}`;
           fs.writeFile(filePathNew, binaryData, "binary", (err) => {
             if (err) {
@@ -238,7 +230,6 @@ const editUser = (data, newAvatar) => {
           name: data.name,
           email: data.email,
           username: data.username,
-          // password: hashPasswordFromBcrypt || data.password,
           phone: data.phone,
           address: data.address,
           gender: data.gender,
@@ -246,7 +237,6 @@ const editUser = (data, newAvatar) => {
           avatar: nameImage ?? oldImage,
         });
 
-        // notify
         if (data.originatorId) {
           let userNotify = await db.User.findByPk(data.originatorId);
 
@@ -254,14 +244,16 @@ const editUser = (data, newAvatar) => {
             let getRole = await db.Role.findOne({
               where: {
                 id: userNotify.roleId,
-              }
-            })
+              },
+            });
 
             await db.Notification.create({
               title: "Cập nhật thông tin tải khoản",
-              message: `${userNotify.name || userNotify.username} (${getRole ? getRole.name : ""}) đã thay đổi thông tin tài khoản username: ${data.username}.`,
+              message: `${userNotify.name || userNotify.username} (${
+                getRole ? getRole.name : ""
+              }) đã thay đổi thông tin tài khoản username: ${data.username}.`,
               userId: data?.originatorId,
-            })
+            });
           }
         }
 
@@ -289,22 +281,22 @@ const deleteUser = (userId, originatorId) => {
         where: { id: userId },
       });
 
-      // notify
-      if(originatorId) {
+      if (originatorId) {
         let userNotify = await db.User.findByPk(originatorId);
-  
-        if(userNotify) {
+        if (userNotify) {
           let getRole = await db.Role.findOne({
             where: {
               id: userNotify.roleId,
-            }
-          })
-  
+            },
+          });
+
           await db.Notification.create({
             title: "Xóa tài Khoản",
-            message: `${userNotify.name || userNotify.username} (${getRole ? getRole.name : ""}) đã xóa tài khoản username: ${user.username}.`,
+            message: `${userNotify.name || userNotify.username} (${
+              getRole ? getRole.name : ""
+            }) đã xóa tài khoản username: ${user.username}.`,
             userId: originatorId,
-          })        
+          });
         }
       }
 
@@ -320,14 +312,13 @@ const deleteUser = (userId, originatorId) => {
         fs.unlink(filePathOld, (err) => {
           if (err) {
             console.error(err);
-            // return res.status(500).send('Error deleting the file');
           }
         });
       }
 
       await db.User.destroy({
         where: { id: userId },
-      });      
+      });
 
       resolve({
         errCode: 0,

@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS `categories_products`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `roles`;
 
--- vai trò
+-- roles
 CREATE TABLE `roles`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255),
@@ -20,7 +20,7 @@ CREATE TABLE `roles`  (
   `updated_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 );
 
--- người dùng
+-- users
 CREATE TABLE `users`  (
   `id` int(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50),
@@ -38,7 +38,7 @@ CREATE TABLE `users`  (
 );
 
 -- PRODUCT
--- các loại món ăn (tráng miệng, món chính, v.v)
+-- category-foods :V
 CREATE TABLE `categories_products`  (
   `id` int(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `keyword` varchar(50),
@@ -49,7 +49,7 @@ CREATE TABLE `categories_products`  (
   `updated_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 );
 
--- các món ăn
+-- foods
 CREATE TABLE `foods`  (
   `id` int(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `keyword` varchar(50),
@@ -82,7 +82,7 @@ CREATE TABLE `drink_variant`  (
   `keyword` varchar(50),
   `name` varchar(255),
   `price` float(10),
-  `size` varchar(50),  
+  `size` varchar(50),
   `discount_variant` int(10),
   `drink_id` int(10) UNSIGNED,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

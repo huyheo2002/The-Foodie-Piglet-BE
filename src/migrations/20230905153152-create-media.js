@@ -1,21 +1,21 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Media', {
+    await queryInterface.createTable("Media", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       filepath: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       mimetype: {
-        allowNull: false,      
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       ownerId: {
         type: Sequelize.INTEGER,
@@ -25,7 +25,7 @@ module.exports = {
             tableName: "Users",
           },
           key: "id",
-        }
+        },
       },
       ratingId: {
         type: Sequelize.INTEGER,
@@ -35,19 +35,19 @@ module.exports = {
             tableName: "Ratings",
           },
           key: "id",
-        }
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Media');
-  }
+    await queryInterface.dropTable("Media");
+  },
 };
