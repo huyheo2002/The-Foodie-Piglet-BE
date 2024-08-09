@@ -3,7 +3,6 @@ import db from "../models";
 const getAllTables = (tableId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(tableId);
       let tables = "";
       if (tableId === "all") {
         tables = await db.Tables.findAll({

@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ReserveTable extends Model {
     /**
@@ -14,48 +12,51 @@ module.exports = (sequelize, DataTypes) => {
       ReserveTable.belongsTo(models["Tables"], { foreignKey: "idTable" });
     }
   }
-  ReserveTable.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
+  ReserveTable.init(
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      idTable: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      phone: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      dateStart: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      dateEnd: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     },
-    idTable: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    phone: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    dateStart: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    dateEnd: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,   
-      allowNull: false,   
-    },
-    updatedAt: {
-      type: DataTypes.DATE,    
-      allowNull: false,   
-    },
-  }, {
-    sequelize,
-    modelName: 'ReserveTable',
-  });
+    {
+      sequelize,
+      modelName: "ReserveTable",
+    }
+  );
   return ReserveTable;
 };

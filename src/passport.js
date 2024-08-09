@@ -1,5 +1,4 @@
 require("dotenv").config();
-// import passport from "passport";
 import db from "./models";
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -25,24 +24,15 @@ passport.use(
       callbackURL: "http://localhost:8080/api/auth/google/callback",
     },
     async function (accessToken, refreshToken, profile, cb) {
-      // add user to database
-      // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      // });
-
       console.log("profile", profile);
-      if (profile?.id) {        
+      if (profile?.id) {
         let hashPasswordFromBcrypt = await hashPassword(profile.id);
-        // let spliceId = Number.parseInt(profile.id.toString().slice(0, 9));
         const userData = {
-          // id: spliceId,
           email: profile.emails && profile.emails[0]?.value,
-          // roleId: 4,
           username: profile.emails[0]?.value,
           name: profile.displayName,
           password: hashPasswordFromBcrypt,
         };
-
-        console.log("Creating or finding user with data:", userData);
 
         try {
           const [user, created] = await db.User.findOrCreate({

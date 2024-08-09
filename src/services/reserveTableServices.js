@@ -9,24 +9,26 @@ const createReserveTable = (data) => {
         email: data.email,
         phone: data.phone,
         dateStart: data.dateStart,
-        dateEnd: data.dateEnd
+        dateEnd: data.dateEnd,
       });
 
       resolve(respon);
     } catch (error) {
-      reject(error)
+      reject(error);
     }
-  })
-}
+  });
+};
 
 const getAllReserveTable = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let tables = await db.ReserveTable.findAll({
-        include: [{
-          model: db.sequelize.models.Tables,
-          attributes: ["name"],
-        }],
+        include: [
+          {
+            model: db.sequelize.models.Tables,
+            attributes: ["name"],
+          },
+        ],
       });
 
       resolve(tables);
@@ -56,7 +58,7 @@ const updateReserveTable = (data) => {
           email: data.email,
           phone: data.phone,
           dateStart: data.dateStart,
-          dateEnd: data.dateEnd
+          dateEnd: data.dateEnd,
         });
 
         resolve({
@@ -74,12 +76,11 @@ const updateReserveTable = (data) => {
       reject(error);
     }
   });
-}
+};
 
 const deleteReserveTable = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // console.log("id services", id);
       if (!id) {
         resolve({
           errCode: 2,
@@ -89,8 +90,6 @@ const deleteReserveTable = (id) => {
         let destroy = await db.ReserveTable.destroy({
           where: { id: id },
         });
-
-        // console.log("destroy", destroy);
 
         if (destroy) {
           resolve({
@@ -114,5 +113,5 @@ module.exports = {
   createReserveTable: createReserveTable,
   getAllReserveTable: getAllReserveTable,
   updateReserveTable: updateReserveTable,
-  deleteReserveTable: deleteReserveTable
-}
+  deleteReserveTable: deleteReserveTable,
+};

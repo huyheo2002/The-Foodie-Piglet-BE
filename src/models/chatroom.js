@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ChatRoom extends Model {
     /**
@@ -12,36 +10,39 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       ChatRoom.belongsTo(models["User"], { foreignKey: "roomCreatorId" });
-      ChatRoom.hasMany(models["RoomParticipant"], { foreignKey: "roomId" } );
-      ChatRoom.hasMany(models["Message"], { foreignKey: "roomId" } );
+      ChatRoom.hasMany(models["RoomParticipant"], { foreignKey: "roomId" });
+      ChatRoom.hasMany(models["Message"], { foreignKey: "roomId" });
     }
   }
-  ChatRoom.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
+  ChatRoom.init(
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      roomCreatorId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    roomCreatorId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },    
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    {
+      sequelize,
+      modelName: "ChatRoom",
     }
-  }, {
-    sequelize,
-    modelName: 'ChatRoom',
-  });
+  );
   return ChatRoom;
 };

@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Variant extends Model {
     /**
@@ -14,40 +12,43 @@ module.exports = (sequelize, DataTypes) => {
       Variant.belongsTo(models["Product"], { foreignKey: "productId" });
     }
   }
-  Variant.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
-    },    
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING
+  Variant.init(
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      price: {
+        allowNull: false,
+        type: DataTypes.FLOAT,
+      },
+      discountVariant: {
+        allowNull: true,
+        type: DataTypes.INTEGER,
+      },
+      productId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    price: {
-      allowNull: false,
-      type: DataTypes.FLOAT
-    },    
-    discountVariant: {
-      allowNull: true,
-      type: DataTypes.INTEGER
-    },
-    productId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,      
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    {
+      sequelize,
+      modelName: "Variant",
     }
-  }, {
-    sequelize,
-    modelName: 'Variant',
-  });
+  );
   return Variant;
 };
