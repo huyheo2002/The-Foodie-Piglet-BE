@@ -2,12 +2,12 @@ import jwtAction from "../middleware/JwtAction";
 
 const decodeToken = async (req, res) => {
     let accessToken = req.query.accessToken;
-    if(!accessToken) {
+    if (!accessToken) {
         return res.status(500).json({
             errCode: 1,
             message: "Missing inputs parameter!"
         })
-    } 
+    }
 
     let decoded = jwtAction.verifyToken(accessToken) ?? null;
 
@@ -23,7 +23,7 @@ const decodeToken = async (req, res) => {
             errMsg: "Decoded fail",
         })
     }
-    
+
 }
 
 module.exports = {

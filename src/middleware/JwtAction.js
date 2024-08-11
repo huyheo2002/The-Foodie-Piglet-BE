@@ -2,36 +2,42 @@ import Jwt from "jsonwebtoken";
 require("dotenv").config();
 
 const createJwt = (payload) => {
-  // let payload = { name: "huy", address: "hà nội" };
-  let key = process.env.JWT_SECRET;
-  let token = null;
+  const key = process.env.JWT_SECRET;
 
-  try {
-    token = Jwt.sign(payload, key);
-    console.log("token:", token);
-  } catch (error) {
-    console.log(error);
+  if (!key) {
+    console.error("JWT_SECRET is not defined in environment variables.");
+    return null;
   }
 
-  return token;
+  try {
+    const token = Jwt.sign(payload, key);
+    return token;
+  } catch (error) {
+    console.error("Error creating JWT:", error);
+    return null;
+  }
 };
 
 const verifyToken = (token) => {
   if (!token) {
+    console.error("No token provided for verification.");
     return null;
   }
 
-  let key = process.env.JWT_SECRET;
-  let data = null;
+  const key = process.env.JWT_SECRET;
 
-  try {
-    let decoded = Jwt.verify(token, key);
-    data = decoded;
-  } catch (error) {
-    console.log(error);
+  if (!key) {
+    console.error("JWT_SECRET is not defined in environment variables.");
+    return null;
   }
 
-  return data;
+  try {
+    const decoded = Jwt.verify(token, key);
+    return decoded;
+  } catch (error) {
+    console.error("Error verifying JWT:", error);
+    return null;
+  }
 };
 
 module.exports = {
