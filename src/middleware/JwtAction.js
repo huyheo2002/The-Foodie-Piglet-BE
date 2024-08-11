@@ -42,5 +42,5 @@ const verifyToken = (token) => {
 
 module.exports = {
   createJwt: createJwt,
-  verifyToken: verifyToken
+  verifyToken: verifyToken,
 };

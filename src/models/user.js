@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -12,69 +10,72 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.belongsTo(models["Role"], { foreignKey: "roleId" });
-      User.hasMany(models["Notification"], { foreignKey: "userId" } ); 
-      User.hasMany(models["Payment"], { foreignKey: "userId" } );
-      User.hasMany(models["RoomParticipant"], { foreignKey: "userId" } );
-      User.hasMany(models["Message"], { foreignKey: "userId" } );
-      User.hasMany(models["ChatRoom"], { foreignKey: "roomCreatorId" } );
+      User.hasMany(models["Notification"], { foreignKey: "userId" });
+      User.hasMany(models["Payment"], { foreignKey: "userId" });
+      User.hasMany(models["RoomParticipant"], { foreignKey: "userId" });
+      User.hasMany(models["Message"], { foreignKey: "userId" });
+      User.hasMany(models["ChatRoom"], { foreignKey: "roomCreatorId" });
     }
   }
-  User.init({  
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      allowNull: false,
-      primaryKey: true,
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      phone: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      gender: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      avatar: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      roleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 4,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: true,      
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    phone: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    gender: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    avatar: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    roleId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 4      
-    },
-    createdAt: {
-      type: DataTypes.DATE,   
-      allowNull: false,   
-    },
-    updatedAt: {
-      type: DataTypes.DATE,    
-      allowNull: false,   
-    },        
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+    {
+      sequelize,
+      modelName: "User",
+    }
+  );
   return User;
 };

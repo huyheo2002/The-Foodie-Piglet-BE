@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class New extends Model {
     /**
@@ -14,40 +12,43 @@ module.exports = (sequelize, DataTypes) => {
       New.belongsTo(models["Genre"], { foreignKey: "genreId" });
     }
   }
-  New.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
+  New.init(
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      image: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      desc: {
+        allowNull: true,
+        type: DataTypes.TEXT,
+      },
+      genreId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
-    image: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
-    desc: {
-      allowNull: true,
-      type: DataTypes.TEXT
-    },
-    genreId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    {
+      sequelize,
+      modelName: "New",
     }
-  }, {
-    sequelize,
-    modelName: 'New',
-  });
+  );
   return New;
 };

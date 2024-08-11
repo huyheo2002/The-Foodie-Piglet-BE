@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -16,44 +14,47 @@ module.exports = (sequelize, DataTypes) => {
       Product.hasMany(models["CartItem"], { foreignKey: "prodId" });
     }
   }
-  Product.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
+  Product.init(
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      keyword: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      image: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      desc: {
+        allowNull: true,
+        type: DataTypes.TEXT,
+      },
+      categoryId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    keyword: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
-    image: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },    
-    desc: {
-      allowNull: true,
-      type: DataTypes.TEXT
-    },
-    categoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    {
+      sequelize,
+      modelName: "Product",
     }
-  }, {
-    sequelize,
-    modelName: 'Product',
-  });
+  );
   return Product;
 };

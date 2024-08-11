@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Messages', {
+    await queryInterface.createTable("Messages", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -17,7 +17,7 @@ module.exports = {
             tableName: "Users",
           },
           key: "id",
-        }
+        },
       },
       roomId: {
         type: Sequelize.INTEGER,
@@ -27,11 +27,11 @@ module.exports = {
             tableName: "ChatRooms",
           },
           key: "id",
-        }
+        },
       },
       content: {
         allowNull: true,
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -44,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Messages');
-  }
+    await queryInterface.dropTable("Messages");
+  },
 };

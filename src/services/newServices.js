@@ -1,9 +1,6 @@
 import db from "../models";
-import bcrypt from "bcryptjs";
-import jwtAction from "../middleware/JwtAction";
 const fs = require("fs");
 require("dotenv").config();
-const salt = bcrypt.genSaltSync(10);
 import generateUniqueId from "../utils/uniqueName";
 
 const getAllNewsCompact = (newId) => {
@@ -13,23 +10,14 @@ const getAllNewsCompact = (newId) => {
       if (newId === "all") {
         news = await db.New.findAll({
           attributes: {
-            exclude: [
-              "createdAt",
-              "updatedAt",
-            ],
+            exclude: ["createdAt", "updatedAt"],
           },
         });
       } else if (newId && newId !== "all") {
         news = db.New.findOne({
           where: { id: newId },
           attributes: {
-            exclude: [
-              "name",
-              "desc",
-              "image",
-              "createdAt",
-              "updatedAt",
-            ],
+            exclude: ["name", "desc", "image", "createdAt", "updatedAt"],
           },
         });
       } else {
@@ -47,32 +35,24 @@ const getAllNews = (newId) => {
       let news = "";
       if (newId === "all") {
         news = await db.New.findAll({
-          // attributes: {
-          //   exclude: [
-          //     "createdAt",
-          //     "updatedAt",
-          //   ],
-          // },
-          include: [{
-            model: db.sequelize.models.Genre,
-            attributes: ["name"],
-          }],
+          include: [
+            {
+              model: db.sequelize.models.Genre,
+              attributes: ["name"],
+            },
+          ],
         });
       } else if (newId && newId !== "all") {
         news = db.New.findOne({
           where: { id: newId },
           attributes: {
-            exclude: [
-              "name",
-              "desc",
-              "image",
-              "createdAt",
-              "updatedAt",
+            exclude: ["name", "desc", "image", "createdAt", "updatedAt"],
+            include: [
+              {
+                model: db.sequelize.models.Genre,
+                attributes: ["name"],
+              },
             ],
-            include: [{
-              model: db.sequelize.models.Genre,
-              attributes: ["name"],
-            }],
           },
         });
       }
@@ -89,9 +69,7 @@ const createNewNews = (data, image) => {
       let nameImage = null;
       if (image) {
         let binaryData = image.buffer;
-        nameImage =
-          generateUniqueId() + image.originalname || "data.bin";
-        // imagePath += nameImage;
+        nameImage = generateUniqueId() + image.originalname || "data.bin";
         let filePath = `src/public/images/news/${nameImage}`;
         fs.writeFile(filePath, binaryData, "binary", (err) => {
           if (err) {
@@ -102,12 +80,11 @@ const createNewNews = (data, image) => {
         });
       }
 
-      // console.log("nameImage", nameImage)
       await db.New.create({
         name: data.name,
         desc: data.desc,
         genreId: data.genreId,
-        image: nameImage
+        image: nameImage,
       });
       resolve({
         errCode: 0,
@@ -122,7 +99,6 @@ const createNewNews = (data, image) => {
 const editNew = (data, newImage) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("data new edit", data);
       if (!data.id) {
         resolve({
           errCode: 2,
@@ -131,31 +107,24 @@ const editNew = (data, newImage) => {
       }
 
       const idPrim = data.id;
-      console.log("idPrim", idPrim)
       let news = await db.New.findByPk(idPrim);
 
-      console.log("new Edit:", news)
       if (news) {
-        console.log("new tồn tại")
+        console.log("new tồn tại");
         let oldImage = news.image;
         let nameImage = null;
         if (newImage) {
-          // xoá ảnh cũ
           if (news.image) {
             let filePathOld = `src/public/images/news/${news.image}`;
             fs.unlink(filePathOld, (err) => {
               if (err) {
                 console.error(err);
-                // return res.status(500).send('Error deleting the file');
               }
             });
           }
 
-          // tạo mới link ảnh
           let binaryData = newImage.buffer;
-          nameImage =
-            generateUniqueId() + newImage.originalname || "data.bin";
-          // avatarPath += nameImage;
+          nameImage = generateUniqueId() + newImage.originalname || "data.bin";
           let filePathNew = `src/public/images/news/${nameImage}`;
           fs.writeFile(filePathNew, binaryData, "binary", (err) => {
             if (err) {
@@ -208,7 +177,6 @@ const deleteNew = (newId) => {
         fs.unlink(filePathOld, (err) => {
           if (err) {
             console.error(err);
-            // return res.status(500).send('Error deleting the file');
           }
         });
       }

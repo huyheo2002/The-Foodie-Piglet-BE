@@ -9,7 +9,7 @@ const decodeToken = async (req, res) => {
         })
     }
 
-    let decoded = jwtAction.verifyToken(accessToken) ?? null;
+  let decoded = jwtAction.verifyToken(accessToken) ?? null;
 
     if (decoded) {
         return res.status(200).json({
@@ -27,5 +27,5 @@ const decodeToken = async (req, res) => {
 }
 
 module.exports = {
-    decodeToken: decodeToken,
-}
+  decodeToken: decodeToken,
+};
