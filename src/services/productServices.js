@@ -106,6 +106,7 @@ const createNewProduct = (data, image) => {
         name: data.name,
         desc: data.desc,
         categoryId: data.categoryId,
+        isAvailable: data.isAvailable,
         image: nameImage,
       });
 
@@ -180,6 +181,7 @@ const editProduct = (data, image) => {
           name: data.name,
           desc: data.desc,
           categoryId: data.categoryId,
+          isAvailable: data.isAvailable,
           image: nameImage ?? oldImage,
         });
 
