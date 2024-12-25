@@ -2,12 +2,25 @@ import paymentServices from "../services/paymentServices";
 
 const handleGetAllPayment = async (req, res) => {
   let payments = await paymentServices.getAllPayment();
-  console.log("req", req);
 
   return res.status(200).json({
     errCode: 0,
     errMsg: "Ok",
     payments: payments,
+  });
+};
+
+const handleGetRevenueData = async (req, res) => {
+  let revenueDataByMonth = await paymentServices.getRevenueData();
+  let revenueDataByHour = await paymentServices.getOrdersPerHourData();
+
+  return res.status(200).json({
+    errCode: 0,
+    errMsg: "Ok",
+    revenueData: {
+      revenueDataByMonth: revenueDataByMonth,
+      revenueDataByHour: revenueDataByHour,
+    },
   });
 };
 
@@ -65,4 +78,5 @@ module.exports = {
   handleGetAllPaymentOfUser: handleGetAllPaymentOfUser,
   handleDeletePayment: handleDeletePayment,
   handleEditOrder: handleEditOrder,
+  handleGetRevenueData: handleGetRevenueData,
 };

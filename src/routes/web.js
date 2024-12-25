@@ -194,6 +194,10 @@ const initWebRoutes = (app) => {
     "/api/get-all-reserve-tables",
     tableController.handleGetAllReserveTable
   );
+  router.get(
+    "/api/get-reserve-tables-available",
+    tableController.handleGetAvailableTablesByTime
+  );
 
   router.post(
     "/api/create-reserve-tables",
@@ -219,6 +223,10 @@ const initWebRoutes = (app) => {
   router.get(
     "/api/get-all-product-compact",
     productController.handleGetAllProductsCompact
+  );
+  router.get(
+    "/api/get-product-count-by-categories",
+    productController.handleGetProductCountByCategories
   );
   router.get("/api/find-one-product", productController.handleFindOneProduct);
 
@@ -289,6 +297,7 @@ const initWebRoutes = (app) => {
 
   // table payment
   router.get("/api/get-all-payment", paymentController.handleGetAllPayment);
+  router.get("/api/get-revenue-data", paymentController.handleGetRevenueData);
   router.get(
     "/api/get-all-payment-compact",
     paymentController.handleGetAllPaymentCompact

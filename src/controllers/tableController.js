@@ -89,7 +89,7 @@ const handleCreateReserveTable = async (req, res) => {
       ];
       const randomGreeting =
         greetings[Math.floor(Math.random() * greetings.length)];
-      sendMail(email, title, randomGreeting, `<i>${randomGreeting}</i>`);
+      // sendMail(email, title, randomGreeting, `<i>${randomGreeting}</i>`);
     }
 
     return res.status(200).json({
@@ -177,7 +177,7 @@ const handleUpdateReserveTable = async (req, res) => {
       // console.log("<i>${randomGreeting}</i>", `<i>${randomGreeting}</i>`)
 
       // khi muốn gửi mail refresh token + mở comment :v
-      // sendMail(email, title, randomGreeting, `<i>${randomGreeting}</i>`);
+      sendMail(email, title, randomGreeting, `<i>${randomGreeting}</i>`);
     }
 
     return res.status(200).json({
@@ -196,10 +196,25 @@ const handleDeleteReserveTable = async (req, res) => {
   return res.status(200).json(message);
 };
 
+const handleGetAvailableTablesByTime = async (req, res) => {
+  // console.log("req.body", req.body);
+  // console.log("req.query", req.query);
+  let dateStart = req.query.dateStart;
+  let dateEnd = req.query.dateEnd;
+  let tables = await reserveTableServices.getAvailableTablesByTime(dateStart, dateEnd);
+
+  return res.status(200).json({
+    errCode: 0,
+    errMsg: "Ok",
+    tablesAvaialbeByTime: tables,
+  });
+};
+
 module.exports = {
   handleGetAllTables: handleGetAllTables,
   handleCreateReserveTable: handleCreateReserveTable,
   handleGetAllReserveTable: handleGetAllReserveTable,
   handleUpdateReserveTable: handleUpdateReserveTable,
   handleDeleteReserveTable: handleDeleteReserveTable,
+  handleGetAvailableTablesByTime: handleGetAvailableTablesByTime,
 };

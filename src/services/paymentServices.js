@@ -20,6 +20,61 @@ const getAllPayment = () => {
   });
 };
 
+const getRevenueData = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const payments = await db.Payment.findAll({
+        attributes: [
+          [db.sequelize.fn("MONTH", db.sequelize.col("paymentDate")), "month"],
+          [db.sequelize.fn("SUM", db.sequelize.col("totalPrice")), "totalRevenue"],
+        ],
+        group: ["month"],
+        order: [["month", "ASC"]],
+      });
+
+      const labels = payments.map((item) => `Tháng ${item.get("month")}`);
+      const values = payments.map((item) => parseFloat(item.get("totalRevenue")));
+
+      resolve({ labels, values });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  });
+};
+
+const getOrdersPerHourData = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const payments = await db.Payment.findAll({
+        attributes: [
+          [db.sequelize.fn("HOUR", db.sequelize.col("paymentDate")), "hour"],
+          [db.sequelize.fn("COUNT", db.sequelize.col("id")), "orderCount"],
+        ],
+        group: ["hour"],
+        order: [["hour", "ASC"]],
+      });
+
+      const hoursRange = Array.from({ length: 16 }, (_, i) => i + 8);
+
+      const dataMap = Object.fromEntries(
+        payments.map((item) => [
+          parseInt(item.get("hour"), 10),
+          parseInt(item.get("orderCount"), 10),
+        ])
+      );
+
+      const labels = hoursRange.map((hour) => `${hour}h`);
+      const values = hoursRange.map((hour) => dataMap[hour] ?? 0);
+
+      resolve({ labels, values });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  });
+};
+
 const getAllPaymentCompact = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -170,4 +225,6 @@ module.exports = {
   findAllPaymentOfUser: findAllPaymentOfUser,
   deleteOrder: deleteOrder,
   editInfoOrder: editInfoOrder,
+  getRevenueData: getRevenueData,
+  getOrdersPerHourData: getOrdersPerHourData
 };

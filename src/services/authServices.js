@@ -268,6 +268,7 @@ const forgotPassword = async (data) => {
         };
         let token = jwtAction.createJwt(payload);
 
+        console.log("token", token);
         let emailReceive = data.email;
         let title = `Quên mật khẩu`;
         const html = `Xin vui lòng click vào đây để thay đổi mật khẩu: <a href="${process.env.URL_CLIENT}/reset-password/${token}">Click here</a>`;

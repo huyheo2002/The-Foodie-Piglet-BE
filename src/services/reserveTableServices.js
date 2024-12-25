@@ -109,9 +109,44 @@ const deleteReserveTable = (id) => {
   });
 };
 
+const getAvailableTablesByTime = (dateStart, dateEnd) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let tables = await db.ReserveTable.findAll({
+        where: {
+          [db.Sequelize.Op.and]: [
+            {
+              dateStart: {
+                [db.Sequelize.Op.lte]: dateEnd,
+              },
+            },
+            {
+              dateEnd: {
+                [db.Sequelize.Op.gte]: dateStart,
+              },
+            },
+          ],
+        },
+        include: [
+          {
+            model: db.sequelize.models.Tables,
+            attributes: ["name"],
+          },
+        ],
+      });
+
+      resolve(tables);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+
 module.exports = {
   createReserveTable: createReserveTable,
   getAllReserveTable: getAllReserveTable,
   updateReserveTable: updateReserveTable,
   deleteReserveTable: deleteReserveTable,
+  getAvailableTablesByTime: getAvailableTablesByTime,
 };

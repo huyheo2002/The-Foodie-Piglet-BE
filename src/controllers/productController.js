@@ -36,6 +36,16 @@ const handleGetAllProductsCompact = async (req, res) => {
   });
 };
 
+const handleGetProductCountByCategories = async (req, res) => {
+  let countProductOfCategories = await productServices.getAllProductCountByCategory();
+
+  return res.status(200).json({
+    errCode: 0,
+    errMsg: "Ok",
+    countProductOfCategories: countProductOfCategories,
+  });
+};
+
 const handleFindOneProduct = async (req, res) => {
   let id = req.query.id;
   let products = await productServices.findOneProduct(id);
@@ -84,4 +94,5 @@ module.exports = {
   handleEditProduct: handleEditProduct,
   handleDeleteProduct: handleDeleteProduct,
   handleFindOneProduct: handleFindOneProduct,
+  handleGetProductCountByCategories: handleGetProductCountByCategories,
 };

@@ -242,6 +242,34 @@ const deleteProduct = (prodId) => {
   });
 };
 
+const getAllProductCountByCategory = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let productCounts = await db.Product.findAll({
+        attributes: [
+          [db.sequelize.fn("COUNT", db.sequelize.col("Product.id")), "count"],
+        ],
+        include: [
+          {
+            model: db.sequelize.models.Category,
+            attributes: ["name"],
+          },
+        ],
+        group: ["Category.id"],
+      });
+
+      const result = productCounts.map((item) => ({
+        category: item.Category.name,
+        count: item.getDataValue("count"),
+      }));
+
+      resolve(result);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   getAllProduct: getAllProduct,
   getAllProductCompact: getAllProductCompact,
@@ -249,4 +277,5 @@ module.exports = {
   editProduct: editProduct,
   deleteProduct: deleteProduct,
   findOneProduct: findOneProduct,
+  getAllProductCountByCategory: getAllProductCountByCategory,
 };
